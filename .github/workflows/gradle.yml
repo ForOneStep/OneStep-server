@@ -91,7 +91,7 @@ jobs:
             sudo docker run -d -p 8081:8081 ${{ secrets.DOCKER_USERNAME }}/docker-test-dev
             sudo docker image prune -f
             
-      - name: Add permission
-        run: chmod +x gradlew
+      - name: Run chmod to make gradlew executable
+        run: chmod +x ./gradlew
             
 
