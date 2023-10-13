@@ -15,6 +15,7 @@ import java.util.Date;
 @Entity
 public class Letter {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long letter_id;
 
