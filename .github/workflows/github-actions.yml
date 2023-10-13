@@ -87,7 +87,7 @@ jobs:
           envs: GITHUB_SHA
           script: |
             sudo docker ps
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/conteswt
             sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/conteswt
             sudo docker image prune -f
       
