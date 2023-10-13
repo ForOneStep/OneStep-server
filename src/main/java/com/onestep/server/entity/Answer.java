@@ -21,7 +21,7 @@ public class Answer {
 
     //외래키
     @JoinColumn(name="question_id")
-    private String question_id;
+    private Long question_id;
 
     //외래키
     @JoinColumn(name="user_id")
