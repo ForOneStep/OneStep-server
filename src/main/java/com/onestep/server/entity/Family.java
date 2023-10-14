@@ -1,13 +1,13 @@
 package com.onestep.server.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import jakarta.persistence.Id;
+import javax.persistence.Id;
 
 import java.util.Date;
 

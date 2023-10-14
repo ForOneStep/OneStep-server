@@ -1,9 +1,9 @@
 package com.onestep.server.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import jakarta.persistence.Id;
+import javax.persistence.Id;
 
 import java.util.Date;
 
