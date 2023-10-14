@@ -27,8 +27,13 @@ public class AnswerController {
     public Answer writeAnswer(@PathVariable Long question_id,@PathVariable String user_id, @RequestPart(value = "answerTxt") String answerTxt, @RequestPart(value = "img") MultipartFile img){
         Answer answer = null;
         try{
-            String url = s3Uploader.upload(img,"answer");
-            answer = answerService.writeAnswer(question_id,user_id,answerTxt,url);
+            log.info("imgTest={}",img);
+            if(img.isEmpty()) {
+                answer = answerService.writeAnswer(question_id,user_id,answerTxt,"");
+            }else {
+                String url = s3Uploader.upload(img, "answer");
+                answer = answerService.writeAnswer(question_id, user_id, answerTxt, url);
+            }
         }catch (IOException e){
             e.printStackTrace();
         }
