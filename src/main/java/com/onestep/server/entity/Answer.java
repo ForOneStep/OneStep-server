@@ -16,6 +16,7 @@ import java.util.Date;
 @Entity
 public class Answer {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long answer_id;
 
@@ -29,7 +30,7 @@ public class Answer {
 
     @Column(length = 400, nullable = false)
     private String answer_txt;
-
+    @Column(length = 400, nullable = true)
     private String answer_img;
 
     @Temporal(value = TemporalType.DATE)
