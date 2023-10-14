@@ -1,10 +1,10 @@
 package com.onestep.server.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import lombok.*;
-import jakarta.persistence.Id;
+import javax.persistence.Id;
 
 @ToString
 @Getter

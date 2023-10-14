@@ -1,9 +1,9 @@
 package com.onestep.server.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
-import jakarta.persistence.Id;
+import javax.persistence.Id;
 
 import java.util.Date;
 
