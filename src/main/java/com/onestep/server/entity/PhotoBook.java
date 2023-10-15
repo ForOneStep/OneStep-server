@@ -16,11 +16,13 @@ import java.util.Date;
 public class PhotoBook {
     @Id
     @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long photo_id;
 
     //외래키
+    @ManyToOne
     @JoinColumn(name="user_id")
-    private String user_id;
+    private User user;
 
     @Column(nullable = false)
     private String photo_img;
