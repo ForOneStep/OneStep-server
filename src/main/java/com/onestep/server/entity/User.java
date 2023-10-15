@@ -20,8 +20,9 @@ public class User {
     private String user_id;
 
     //외래키
+    @ManyToOne
     @JoinColumn(name="fam_id")
-    private String fam_id;
+    private Family family;
 
     @JsonIgnore
     @Column(length = 100, nullable = false)

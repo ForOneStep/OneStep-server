@@ -2,6 +2,8 @@ package com.onestep.server.entity.answer;
 
 
 import com.onestep.server.entity.Answer;
+import com.onestep.server.entity.Question;
+import com.onestep.server.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,16 +16,16 @@ import java.util.Date;
 public class AnswerDTO {
 
     private String answer_txt;
-    private String user_id;
+    private User user;
     private Date answer_date;
-    private Long question_id;
+    private Question question;
     public Answer toEntity(){
         return Answer.builder()
                 .answer_id(null)
-                .user_id(user_id)
+                .user(user)
                 .answer_txt(answer_txt)
                 .write_date(answer_date)
-                .question_id(question_id)
+                .question(question)
                 .answer_liked(0)
                 .build();
     }
