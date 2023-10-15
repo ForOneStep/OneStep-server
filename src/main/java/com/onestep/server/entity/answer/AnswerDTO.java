@@ -24,6 +24,7 @@ public class AnswerDTO {
                 .answer_txt(answer_txt)
                 .write_date(answer_date)
                 .question_id(question_id)
+                .answer_liked(0)
                 .build();
     }
 }

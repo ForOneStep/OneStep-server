@@ -28,14 +28,16 @@ public class AnswerService {
 
         //답변 저장
         Answer addAnswer = iAnswerRepository.save(answerDTO.toEntity());
-        addAnswer.setAnswer_img(answerImg);
+        if(answerImg != "") {
+            addAnswer.setAnswer_img(answerImg);
+        }
 
         return addAnswer;
     }
 
     //답변 읽기
-    public List<Answer> readAnswer(Long questionId,String family_id){
-        List<Answer> answers = iAnswerRepository.readAnswer(questionId);
+    public List<Answer> readAnswer(Long questionId,String familyId){
+        List<Answer> answers = iAnswerRepository.findAnswerByFamId(questionId,familyId);
         return answers;
     }
 }
