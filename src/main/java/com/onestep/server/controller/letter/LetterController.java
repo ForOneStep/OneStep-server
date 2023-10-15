@@ -19,15 +19,15 @@ public class LetterController {
         return letter;
     }
 
-    //내가 작성한 편지 확인
-    @GetMapping(value = "/letter/byUser/{userId}")
-    public List<Letter> findLetterByWriterId(@PathVariable String userId){
-        return letterService.findLetterByWriterId(userId);
-    }
-
-    //가족 아이디로 편지 목록 확인
-    @GetMapping(value = "/letter/byFamily/{familyId}")
-    public List<Letter> findLetterByFamilyId(@PathVariable String familyId){
-        return letterService.findLetterByFamilyId(familyId);
-    }
+//    //내가 작성한 편지 확인
+//    @GetMapping(value = "/letter/byUser/{userId}")
+//    public List<Letter> findLetterByWriterId(@PathVariable String userId){
+//        return letterService.findLetterByWriterId(userId);
+//    }
+//
+//    //가족 아이디로 편지 목록 확인
+//    @GetMapping(value = "/letter/byFamily/{familyId}")
+//    public List<Letter> findLetterByFamilyId(@PathVariable String familyId){
+//        return letterService.findLetterByFamilyId(familyId);
+//    }
 }
