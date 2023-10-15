@@ -39,11 +39,11 @@ public class AnswerController {
         }
         return answer;
     }
-    //답변 읽기
-    @GetMapping("/answer/read/{question_id}/{family_id}")
-    public List<Answer> getAnswer(@PathVariable Long question_id,@PathVariable String family_id){
-        List<Answer> answers = answerService.readAnswer(question_id,family_id);
-
-        return answers;
-    }
+//    //답변 읽기
+//    @GetMapping("/answer/read/{question_id}/{family_id}")
+//    public List<Answer> getAnswer(@PathVariable Long question_id,@PathVariable String family_id){
+//        List<Answer> answers = answerService.readAnswer(question_id,family_id);
+//
+//        return answers;
+//    }
 }

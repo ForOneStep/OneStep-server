@@ -17,20 +17,22 @@ import java.util.Date;
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
     private Long answer_id;
 
     //외래키
+    @ManyToOne
     @JoinColumn(name="question_id")
-    private Long question_id;
+    private Question question;
 
     //외래키
+    @ManyToOne
     @JoinColumn(name="user_id")
-    private String user_id;
+    private User user;
 
     @Column(length = 400, nullable = false)
     private String answer_txt;
-    @Column(length = 400, nullable = true)
+
+    @Column(length = 400)
     private String answer_img;
 
     @Temporal(value = TemporalType.DATE)

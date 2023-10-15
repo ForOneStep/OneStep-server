@@ -16,19 +16,23 @@ import java.util.Date;
 public class Comment {
     @Id
     @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long comment_id;
 
     //외래키
+    @ManyToOne
     @JoinColumn(name="answer_id")
-    private Long answer_id;
+    private Answer answer;
+
+//    //외래키
+//    @ManyToOne
+//    @JoinColumn(name="comment_id", insertable = false, updatable = false)
+//    private Comment comment;
 
     //외래키
-    @JoinColumn(name="answer_id")
-    private Long root_comment_id;
-
-    //외래키
+    @ManyToOne
     @JoinColumn(name="user_id")
-    private String user_id;
+    private User user;
 
     @Column(length = 400, nullable = false)
     private String user_role;

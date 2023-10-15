@@ -20,8 +20,9 @@ public class Letter {
     private Long letter_id;
 
     //외래키
+    @ManyToOne
     @JoinColumn(name="user_id")
-    private String user_id;
+    private User user;
 
     @Column(length = 100, nullable = false)
     private String letter_title;
