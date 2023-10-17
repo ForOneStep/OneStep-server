@@ -1,10 +1,12 @@
 package com.onestep.server.service.answer;
 
 import com.onestep.server.entity.Answer;
+import com.onestep.server.entity.Family;
 import com.onestep.server.entity.Question;
 import com.onestep.server.entity.User;
 import com.onestep.server.entity.answer.AnswerDTO;
 import com.onestep.server.repository.IAnswerRepository;
+import com.onestep.server.repository.IFamilyRepository;
 import com.onestep.server.repository.IQuestionRepository;
 import com.onestep.server.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class AnswerService {
     private final IAnswerRepository iAnswerRepository;
     private final IUserRepository iUserRepository;
     private final IQuestionRepository iQuestionRepository;
+    private final IFamilyRepository iFamilyRepository;
 
     // 답변 작성
     public Answer writeAnswer(Long questionId, String userId,String answerTxt, String answerImg){
@@ -47,10 +50,33 @@ public class AnswerService {
 
         return addAnswer;
     }
+    //답변 읽기
+    public List<Answer> readAnswer(Long questionId,String familyId){
+        Optional<Question> optionalQuestion = iQuestionRepository.findById(questionId);
+        Question question =optionalQuestion.get();
+        Optional<Family> optionalFamily = iFamilyRepository.findById(familyId);
+        Family family = optionalFamily.get();
+        List<Answer> answers = iAnswerRepository.findAnswerByFamId(question,family);
+        return answers;
+    }
 
-//    //답변 읽기
-//    public List<Answer> readAnswer(Long questionId,String familyId){
-//        List<Answer> answers = iAnswerRepository.findAnswerByFamId(questionId,familyId);
-//        return answers;
-//    }
+    //답변 수정
+    public Answer update(Long answerId,String updateTxt,String answerImg){
+        Optional<Answer> optionalAnswer = iAnswerRepository.findById(answerId);
+        int answer_liked = optionalAnswer.get().getAnswer_liked();
+        Answer updateAnswer = new Answer();
+
+        Date date = new Date();
+        updateAnswer.setAnswer_id(answerId);
+        updateAnswer.setQuestion(optionalAnswer.get().getQuestion());
+        updateAnswer.setUser(optionalAnswer.get().getUser());
+        updateAnswer.setAnswer_txt(updateTxt);
+        updateAnswer.setWrite_date(date);
+        updateAnswer.setAnswer_liked(answer_liked);
+        if(answerImg != "") {
+            updateAnswer.setAnswer_img(answerImg);
+        }
+        //답변 저장
+        return iAnswerRepository.save(updateAnswer);
+    }
 }
