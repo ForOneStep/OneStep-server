@@ -18,4 +18,8 @@ public interface ILetterRepository extends JpaRepository<Letter, Long> {
     //가족 아이디로 편지 목록 확인
     @Query("SELECT l, u FROM Letter l LEFT JOIN User u ON l.user = u WHERE u.family =:family")
     List<Letter> findLetterByFamilyId(@Param("family") Family family);
+
+    //쪽지 상태 변경
+    @Query("UPDATE Letter l SET l.letter_state = l.letter_state+1  WHERE l.letter_state<2")
+    void changeLetterState();
 }
