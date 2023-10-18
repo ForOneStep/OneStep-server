@@ -9,6 +9,7 @@ import com.onestep.server.repository.ILetterRepository;
 import com.onestep.server.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,11 @@ public class LetterService {
     private final ILetterRepository iLetterRepository;
     private final IUserRepository iUserRepository;
     private final IFamilyRepository iFamilyRepository;
+
+    @Scheduled(cron = "0 0 6 ? * 5", zone = "Asia/Seoul") //매주 금요일 오전 6시마다
+    public void changeLetterState(){
+        iLetterRepository.changeLetterState();
+    }
 
     //익명편지 작성
     public void writeLetter(Letter letter){
