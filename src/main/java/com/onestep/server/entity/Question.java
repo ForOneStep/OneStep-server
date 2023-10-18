@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.Id;
 
 @ToString
@@ -20,5 +22,8 @@ public class Question {
 
     @Column(nullable = false)
     private String question_txt;
+
+    @ColumnDefault("0")
+    private boolean has_image;
 
 }
