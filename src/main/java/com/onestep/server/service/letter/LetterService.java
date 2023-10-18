@@ -31,12 +31,12 @@ public class LetterService {
         iLetterRepository.changeLetterState();
     }
 
-    //익명편지 작성
+    //익명 쪽지 작성
     public void writeLetter(Letter letter){
         iLetterRepository.save(letter);
     }
 
-    //내가 작성한 편지 확인
+    //내가 작성한 쪽지 확인
     public List<LetterListDTO> findLetterByWriterId(String userId){
         Optional<User> optionalUser = iUserRepository.findById(userId);
         User user = optionalUser.get();
@@ -45,13 +45,23 @@ public class LetterService {
         return makeReturnLetterList(originLetterList);
     }
 
-    //가족 아이디로 편지 목록 확인
+    //가족 아이디로 쪽지 목록 확인
     public List<LetterListDTO> findLetterByFamilyId(String familyId){
         Optional<Family> optionalFamily = iFamilyRepository.findById(familyId);
         Family family = optionalFamily.get();
 
-        //우리 가족이 작성한 편지 가져오기
+        //우리 가족이 작성한 쪽지 가져오기
         List<Letter> originLetterList = iLetterRepository.findLetterByFamilyId(family);
+        return makeReturnLetterList(originLetterList);
+    }
+
+    //가족 아이디로 이번주 공개된 쪽지 목록 확인
+    public List<LetterListDTO> findWeeklyLetterByFamilyId(String familyId){
+        Optional<Family> optionalFamily = iFamilyRepository.findById(familyId);
+        Family family = optionalFamily.get();
+
+        //우리 가족이 작성한 쪽지 가져오기
+        List<Letter> originLetterList = iLetterRepository.findWeeklyLetterByFamilyId(family);
         return makeReturnLetterList(originLetterList);
     }
 
@@ -68,6 +78,7 @@ public class LetterService {
             letterListDTO.setLetter_txt(l.getLetter_txt());
             letterListDTO.setLetter_title(l.getLetter_title());
             letterListDTO.setWrite_date(l.getWrite_date());
+            letterListDTO.setLetter_state(l.getLetter_state());
 
             letterList.add(letterListDTO);
 
