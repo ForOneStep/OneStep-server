@@ -17,5 +17,6 @@ public class LetterListDTO {
     private String letter_title;
     private String letter_txt;
     private Date write_date;
+    private int letter_state;
 
 }
