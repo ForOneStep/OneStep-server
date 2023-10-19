@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -26,5 +28,9 @@ public class QuestionService {
     public Question showQuestion(Long questionId){
         Optional<Question> optionalQuestion = iQuestionRepository.findById(questionId);
         return optionalQuestion.get();
+    }
+
+    public List<Question> showQuestionList(Long questionId){
+        return iQuestionRepository.findListById(questionId);
     }
 }

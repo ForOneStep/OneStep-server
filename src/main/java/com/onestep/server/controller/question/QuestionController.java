@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -17,5 +19,11 @@ public class QuestionController {
     @GetMapping(value = "/question/{questionId}")
     public Question showQuestion(@PathVariable Long questionId){
         return questionService.showQuestion(questionId);
+    }
+
+    //질문 목록확인
+    @GetMapping(value = "/question/list/{questionId}")
+    public List<Question> showQuestionList(@PathVariable Long questionId) {
+        return questionService.showQuestionList(questionId);
     }
 }
