@@ -2,10 +2,12 @@ package com.onestep.server.entity;
 
 import javax.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.Id;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @ToString
 @Getter
@@ -39,6 +41,6 @@ public class Answer {
     @Column(nullable = false)
     private Date write_date;
 
-    @ColumnDefault("0")
-    private int answer_liked;
+    @OneToMany(mappedBy = "answer", cascade = {CascadeType.REMOVE})
+    private List<LikeAnswer> like = new ArrayList<>();
 }
