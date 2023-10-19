@@ -1,11 +1,13 @@
 package com.onestep.server.entity.answer;
 
 import com.onestep.server.entity.Family;
+import com.onestep.server.entity.LikeAnswer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,7 +21,5 @@ public class AnswerReturnDTO {
     private String answer_txt;
     private String answer_img;
     private Date write_date;
-    private int answer_liked;
-
-
+    private List<LikeAnswer> like;
 }

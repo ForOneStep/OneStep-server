@@ -58,7 +58,7 @@ public class AnswerController {
             answerReturnDTO.setAnswer_txt(re.getAnswer_txt());
             answerReturnDTO.setAnswer_img(re.getAnswer_img());
             answerReturnDTO.setWrite_date(re.getWrite_date());
-            answerReturnDTO.setAnswer_liked(re.getAnswer_liked());
+            answerReturnDTO.setLike(re.getLike());
 
             answerReturnsDTO.add(answerReturnDTO);
         }
@@ -66,20 +66,29 @@ public class AnswerController {
     }
 
     //답변 수정
-    @PutMapping("/answer/update/{answerId}")
-    public String update(@PathVariable Long answerId, @RequestPart String updateTxt, @RequestPart(value = "img", required = false) MultipartFile img) throws IOException {
+    @PutMapping("/answer/update/{answer_id}")
+    public String update(@PathVariable Long answer_id, @RequestPart String updateTxt, @RequestPart(value = "img", required = false) MultipartFile img) throws IOException {
         Answer answer = null;
         try{
             log.info("imgTest={}",img);
             if(img.isEmpty()) {
-                answer = answerService.update(answerId, updateTxt,"");
+                answer = answerService.update(answer_id, updateTxt,"");
             }else {
                 String url = s3Uploader.upload(img,"answer");
-                answer = answerService.update(answerId, updateTxt, url);
+                answer = answerService.update(answer_id, updateTxt, url);
             }
         }catch (IOException e){
             e.printStackTrace();
         }
         return answer.getQuestion().getQuestion_id()+"번 질문에 대한 답변 수정이 완료되었습니다.";
+    }
+
+    //좋아요
+    @PostMapping("/answer/likeAnswer/{answer_id}/{user_id}")
+    public String likeAnswer(@PathVariable Long answer_id,@PathVariable String user_id){
+
+        String like = "";
+        like = answerService.likeAnswer(answer_id,user_id);
+        return like;
     }
 }

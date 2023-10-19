@@ -1,14 +1,10 @@
 package com.onestep.server.service.answer;
 
-import com.onestep.server.entity.Answer;
-import com.onestep.server.entity.Family;
-import com.onestep.server.entity.Question;
-import com.onestep.server.entity.User;
+import com.onestep.server.entity.*;
 import com.onestep.server.entity.answer.AnswerDTO;
-import com.onestep.server.repository.IAnswerRepository;
-import com.onestep.server.repository.IFamilyRepository;
-import com.onestep.server.repository.IQuestionRepository;
-import com.onestep.server.repository.IUserRepository;
+import com.onestep.server.entity.like.LikeAnswerClass;
+import com.onestep.server.entity.like.LikeAnswerDTO;
+import com.onestep.server.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +23,7 @@ public class AnswerService {
     private final IUserRepository iUserRepository;
     private final IQuestionRepository iQuestionRepository;
     private final IFamilyRepository iFamilyRepository;
+    private final ILikeAnswerRepository iLikeAnswerRepository;
 
     // 답변 작성
     public Answer writeAnswer(Long questionId, String userId,String answerTxt, String answerImg){
@@ -63,7 +60,6 @@ public class AnswerService {
     //답변 수정
     public Answer update(Long answerId,String updateTxt,String answerImg){
         Optional<Answer> optionalAnswer = iAnswerRepository.findById(answerId);
-        int answer_liked = optionalAnswer.get().getAnswer_liked();
         Answer updateAnswer = new Answer();
 
         Date date = new Date();
@@ -72,11 +68,35 @@ public class AnswerService {
         updateAnswer.setUser(optionalAnswer.get().getUser());
         updateAnswer.setAnswer_txt(updateTxt);
         updateAnswer.setWrite_date(date);
-        updateAnswer.setAnswer_liked(answer_liked);
         if(answerImg != "") {
             updateAnswer.setAnswer_img(answerImg);
         }
         //답변 저장
         return iAnswerRepository.save(updateAnswer);
+    }
+
+    //좋아요
+    public String likeAnswer(Long answerId, String userId){
+        Optional<Answer> optionalAnswer = iAnswerRepository.findById(answerId);
+        Answer answer = optionalAnswer.get();
+        Optional<User> optionalUser = iUserRepository.findById(userId);
+        User user = optionalUser.get();
+        LikeAnswerClass likeAnswerClass = new LikeAnswerClass();
+        likeAnswerClass.setAnswerId(answerId);
+        likeAnswerClass.setUserId(userId);
+        Optional<LikeAnswer> optionalLike = iLikeAnswerRepository.findById(likeAnswerClass);
+
+        if(optionalLike.isEmpty()){
+            LikeAnswerDTO likeAnswerDTO = new LikeAnswerDTO();
+            likeAnswerDTO.setLikeId(likeAnswerClass);
+            likeAnswerDTO.setAnswer(answer);
+            likeAnswerDTO.setUser(user);
+            iLikeAnswerRepository.save(likeAnswerDTO.toEntity());
+            return answerId+"번 답변에 대한 "+userId+"의 좋아요 추가 완료";
+        }else{
+            iLikeAnswerRepository.deleteById(likeAnswerClass);
+            return answerId+"번 답변에 대한 "+userId+"의 좋아요 삭제 완료";
+        }
+
     }
 }
