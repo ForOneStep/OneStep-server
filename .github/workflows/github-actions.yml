@@ -42,7 +42,7 @@ jobs:
         run: |
           mkdir ./src/main/resources
           cd ./src/main/resources # resources 폴더로 이동
-          touch ./application.yml # application.yml 생성
+          touch ./application.properties # application.properties 생성
           echo "${{ secrets.YML }}" > ./application.yml # github actions에서 설정한 값을 application.yml 파일에 쓰기
         shell: bash
 
