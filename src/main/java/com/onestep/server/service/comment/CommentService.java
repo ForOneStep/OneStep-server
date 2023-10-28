@@ -1,8 +1,6 @@
 package com.onestep.server.service.comment;
 
-import com.onestep.server.entity.Answer;
 import com.onestep.server.entity.Comment;
-import com.onestep.server.entity.User;
 import com.onestep.server.entity.comment.WriteCommentDto;
 import com.onestep.server.repository.IAnswerRepository;
 import com.onestep.server.repository.ICommentRepository;
