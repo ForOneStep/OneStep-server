@@ -1,6 +1,7 @@
 package com.onestep.server.service.comment;
 
 import com.onestep.server.entity.Comment;
+import com.onestep.server.entity.comment.ViewCommentDto;
 import com.onestep.server.entity.comment.WriteCommentDto;
 import com.onestep.server.repository.IAnswerRepository;
 import com.onestep.server.repository.ICommentRepository;
@@ -9,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +55,26 @@ public class CommentService {
 
         iCommentRepository.save(comment);
         return "["+comment.getComment_txt()+"] 댓글이 작성되었습니다.";
+    }
+
+    public List<ViewCommentDto> viewComment(Long answerId){
+        List<Comment> commentList = iCommentRepository.findByAnswerId(answerId);
+        List<ViewCommentDto> viewCommentDtoList = new ArrayList<>();
+
+        commentList.forEach(comment -> {
+            ViewCommentDto viewCommentDto = new ViewCommentDto();
+
+            viewCommentDto.setComment_txt(comment.getComment_txt());
+
+            if(comment.getComment()!=null){
+                viewCommentDto.setRoot_comment_id(comment.getComment().getComment_id());
+            }
+            viewCommentDto.setWriter_id(comment.getUser().getUser_id());
+            viewCommentDto.setWrite_date(comment.getWrite_date());
+
+            viewCommentDtoList.add(viewCommentDto);
+        });
+
+        return viewCommentDtoList;
     }
 }
