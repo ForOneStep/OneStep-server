@@ -1,6 +1,8 @@
 package com.onestep.server.entity;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import javax.persistence.Id;
 
@@ -20,6 +22,7 @@ public class Comment {
     private Long comment_id;
 
     //외래키
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="answer_id")
     private Answer answer;
