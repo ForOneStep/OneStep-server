@@ -2,6 +2,7 @@ package com.onestep.server.controller.answer;
 
 
 import com.onestep.server.entity.Answer;
+import com.onestep.server.entity.GroupQuestion;
 import com.onestep.server.entity.answer.AnswerDTO;
 import com.onestep.server.entity.answer.AnswerReturnDTO;
 import com.onestep.server.service.answer.AnswerService;
