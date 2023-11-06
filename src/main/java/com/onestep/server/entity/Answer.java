@@ -28,6 +28,11 @@ public class Answer {
 
     //외래키
     @ManyToOne
+    @JoinColumn(name="group_question_id")
+    private GroupQuestion groupQuestion;
+
+    //외래키
+    @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
 
