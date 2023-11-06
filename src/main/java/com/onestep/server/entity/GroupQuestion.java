@@ -30,6 +30,4 @@ public class GroupQuestion {
     @Column(nullable = false)
     private String question_txt;
 
-    @ColumnDefault("0")
-    private boolean has_image;
 }
