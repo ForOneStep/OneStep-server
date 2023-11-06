@@ -2,9 +2,10 @@ package com.onestep.server.service.question;
 
 import com.onestep.server.entity.GroupQuestion;
 import com.onestep.server.entity.KeyWord;
-import com.onestep.server.entity.Question;
 import com.onestep.server.entity.gpt.ChatRequestDTO;
 import com.onestep.server.entity.gpt.ChatResponseDTO;
+import com.onestep.server.entity.question.SaveGroupQuestionDto;
+import com.onestep.server.entity.question.SaveQuestionDto;
 import com.onestep.server.repository.IGroupQuestionRepository;
 import com.onestep.server.repository.IKeyWordRepository;
 import com.onestep.server.repository.IQuestionRepository;
@@ -42,8 +43,7 @@ public class GptService {
         headers.set("Content-Type", "application/json");
         headers.set("Authorization", "Bearer " + openaiApiKey);
 
-        HttpEntity<ChatRequestDTO> httpRequest = new HttpEntity<>(chatRequest, headers);
-        return httpRequest;
+        return new HttpEntity<>(chatRequest, headers);
     }
 
     //@Scheduled(cron = "0 0 6 * * *", zone = "Asia/Seoul")
@@ -57,14 +57,14 @@ public class GptService {
         random.setSeed(System.currentTimeMillis());
 
         // 나쁨
-        Long randomNum = Long.valueOf(random.nextInt(10) + 1);
+        Long randomNum = (long) (random.nextInt(10) + 1);
         Optional<KeyWord> optionalKeyWord = iKeyWordRepository.findById(randomNum);
         String randomWord = optionalKeyWord.get().getKeyword();
         String query1 = "평소에 대화를 잘 하지 않는 가족이 서로에게 궁금해 할법한 질문을 1개 추천해줘.";
         query1 += "\n질문의 조건은 다음과 같아.";
         query1 += "\n1.이 가족은 자신의 가족이 서로 친밀하지 않다고 느껴.";
-        query1 += "\n2.가족의 관계에 도움이 될만한 질문이어야해";
-        query1 += "\n3.다음 키워드와 관련된 질문이어야돼: ";
+        query1 += "\n1.가족의 관계에 도움이 될만한 질문이어야해";
+        query1 += "\n2.다음 키워드와 관련된 질문이어야돼: ";
         query1 += randomWord;
         query1 += "\n답변 형식은 '오늘의 질문: {오늘의 질문}' 이 형식으로 적어줘";
 
@@ -80,15 +80,19 @@ public class GptService {
         }
 
         String state1 = response1.getChoices().get(0).getMessage().getContent().substring(8);
-        GroupQuestion newQuestion1 = new GroupQuestion(null, date, 1, state1);
-        newQuestionList.add(newQuestion1);
+        SaveGroupQuestionDto dto = new SaveGroupQuestionDto();
+        dto.setQuestion_date(date);
+        dto.setQuestion_txt(state1);
+        dto.setGroup_number(1);
+        newQuestionList.add(dto.toEntity());
+        log.info(dto.getQuestion_txt());
 
         // 보통
         String query2 = "일반적인 가족이 서로에게 궁금해 할법한 질문을 1개 추천해줘.";
         query2 += "\n질문의 조건은 다음과 같아.";
         query2 += "\n1.이 가족은 자신의 가족 관계가 평험하다고 느껴.";
-        query2 += "\n2.가족의 관계에 도움이 될만한 질문이어야해";
-        query2 += "\n3.다음 키워드와 관련된 질문이어야돼: ";
+        query2 += "\n1.가족의 관계에 도움이 될만한 질문이어야해";
+        query2 += "\n2.다음 키워드와 관련된 질문이어야돼: ";
         query2 += randomWord;
         query2 += "\n답변 형식은 '오늘의 질문: {오늘의 질문}' 이 형식으로 적어줘";
 
@@ -104,15 +108,18 @@ public class GptService {
         }
 
         String state2 = response2.getChoices().get(0).getMessage().getContent().substring(8);
-        GroupQuestion newQuestion2 = new GroupQuestion(null, date, 2, state2);
-        newQuestionList.add(newQuestion2);
-
+        SaveGroupQuestionDto dto2 = new SaveGroupQuestionDto();
+        dto2.setQuestion_date(date);
+        dto2.setQuestion_txt(state2);
+        dto2.setGroup_number(2);
+        newQuestionList.add(dto2.toEntity());
+        log.info(dto2.getQuestion_txt());
         // 좋음
         String query3 = "화목한 가족이 서로에게 궁금해 할법한 질문을 1개 추천해줘.";
         query3 += "\n질문의 조건은 다음과 같아.";
         query3 += "\n1.이 가족은 자신의 가족이 화목하다고 느껴.";
-        query3 += "\n2.화목함을 유지하는데 도움이 되는 질문이어야해";
-        query3 += "\n3.다음 키워드와 관련된 질문이어야돼: ";
+        query3 += "\n1.화목함을 유지하는데 도움이 되는 질문이어야해";
+        query3 += "\n2.다음 키워드와 관련된 질문이어야돼: ";
         query3 += randomWord;
         query3 += "\n답변 형식은 '오늘의 질문: {오늘의 질문}' 이 형식으로 적어줘";
 
@@ -128,18 +135,21 @@ public class GptService {
         }
 
         String state3 = response3.getChoices().get(0).getMessage().getContent().substring(8);
-        GroupQuestion newQuestion3 = new GroupQuestion(null, date, 3, state3);
-        newQuestionList.add(newQuestion3);
-        System.out.println(newQuestionList);
+        SaveGroupQuestionDto dto3 = new SaveGroupQuestionDto();
+        dto3.setQuestion_date(date);
+        dto3.setQuestion_txt(state3);
+        dto3.setGroup_number(3);
+        newQuestionList.add(dto3.toEntity());
+
         iGroupQuestionRepository.saveAll(newQuestionList);
 
         // 공통
-        Question question;
+        SaveQuestionDto questionDto;
         String query4 = "평소에 대화를 잘 하지 않는 가족이 서로에게 궁금해 할법한 질문을 1개 추천해줘.";
         query4 += "\n질문의 조건은 다음과 같아.";
         query4 += "\n1.이 가족은 자신의 가족이 서로 친밀하지 않다고 느껴.";
-        query4 += "\n2.가족의 관계에 도움이 될만한 질문이어야해";
-        query4 += "\n3.다음 키워드와 관련된 질문이어야돼: ";
+        query4 += "\n1.가족의 관계에 도움이 될만한 질문이어야해";
+        query4 += "\n2.다음 키워드와 관련된 질문이어야돼: ";
         query4 += randomWord;
         query4 += "\n답변 형식은 '오늘의 질문: {오늘의 질문}' 이 형식으로 적어줘";
 
@@ -155,8 +165,11 @@ public class GptService {
         }
 
         String state4 = response4.getChoices().get(0).getMessage().getContent().substring(8);
-        question = new Question(null, date, state4);
 
-        iQuestionRepository.save(question);
+        questionDto = new SaveQuestionDto();
+        questionDto.setQuestion_date(date);
+        questionDto.setQuestion_txt(state4);
+
+        iQuestionRepository.save(questionDto.toEntity());
     }
 }
