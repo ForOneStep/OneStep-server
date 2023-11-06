@@ -3,6 +3,7 @@ package com.onestep.server.controller.letter;
 import com.onestep.server.entity.Letter;
 import com.onestep.server.entity.letter.LetterListDTO;
 import com.onestep.server.service.letter.LetterService;
+import com.onestep.server.service.question.GptService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LetterController {
     private final LetterService letterService;
+    private final GptService gptService;
 
     //익명 쪽지 작성
     @PostMapping(value = "/letter/write")
@@ -25,6 +27,8 @@ public class LetterController {
     //내가 작성한 쪽지 확인
     @GetMapping(value = "/letter/byUser/{userId}")
     public List<LetterListDTO> findLetterByWriterId(@PathVariable String userId){
+        System.out.println("dmddmdmdmdmdmdmdmmdmd");
+        gptService.getDailyQuestions();
         return letterService.findLetterByWriterId(userId);
     }
 
