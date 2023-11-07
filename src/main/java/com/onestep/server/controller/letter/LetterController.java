@@ -27,6 +27,7 @@ public class LetterController {
     //내가 작성한 쪽지 확인
     @GetMapping(value = "/letter/byUser/{userId}")
     public List<LetterListDTO> findLetterByWriterId(@PathVariable String userId){
+        gptService.getQuestions();
         return letterService.findLetterByWriterId(userId);
     }
 

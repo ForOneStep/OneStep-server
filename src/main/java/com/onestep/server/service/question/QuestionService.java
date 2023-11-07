@@ -20,10 +20,10 @@ public class QuestionService {
     private final IQuestionRepository iQuestionRepository;
     private final IFamilyRepository iFamilyRepository;
 
-    @Scheduled(cron = "0 0 6 * * *", zone = "Asia/Seoul") //매일 오전 6시마다
-    public void changeQuestion(){
-        iFamilyRepository.changeQuestionAndState();
-    }
+//    @Scheduled(cron = "0 0 6 * * *", zone = "Asia/Seoul") //매일 오전 6시마다
+//    public void changeQuestion(){
+//        iFamilyRepository.changeQuestionAndState();
+//    }
 
     public Question showQuestion(Long questionId){
         Optional<Question> optionalQuestion = iQuestionRepository.findById(questionId);
