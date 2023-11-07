@@ -53,7 +53,7 @@ public class AnswerService {
         Question question =optionalQuestion.get();
         Optional<Family> optionalFamily = iFamilyRepository.findById(familyId);
         Family family = optionalFamily.get();
-        List<Answer> answers = iAnswerRepository.findAnswerByFamId(question,family);
+        List<Answer> answers = iAnswerRepository.findAnswerByQuestionIdAndFamId(question,family);
         return answers;
     }
 
