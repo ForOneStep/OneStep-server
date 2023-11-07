@@ -11,7 +11,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-public class photoBookDTO {
+public class PhotoBookDTO {
     private User user;
     private String photo_img;
     private String photo_txt;

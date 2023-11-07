@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ICommentRepository extends JpaRepository<Comment, Long> {
 
-    @Query("select c from Comment c where answer_id =:answerId")
+    @Query("select c from Comment c where c.answer.answer_id =:answerId")
     List<Comment> findByAnswerId(Long answerId);
 }
