@@ -10,12 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class LetterController {
     private final LetterService letterService;
-    private final GptService gptService;
 
     //익명 쪽지 작성
     @PostMapping(value = "/letter/write")

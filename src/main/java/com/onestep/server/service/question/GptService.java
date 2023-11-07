@@ -23,7 +23,6 @@ import java.util.*;
 
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class GptService {
     @Value("${openai.model}")
@@ -46,20 +45,22 @@ public class GptService {
         return new HttpEntity<>(chatRequest, headers);
     }
 
-    //@Scheduled(cron = "0 0 6 * * *", zone = "Asia/Seoul")
-    public void getDailyQuestions() {
-        System.out.println("question 입장");
+    public String getKeyword(){
+        Random random = new Random();
+        random.setSeed(System.currentTimeMillis());
+        Long randomNum = (long) (random.nextInt(30) + 1);
+        Optional<KeyWord> optionalKeyWord = iKeyWordRepository.findById(randomNum);
+        return optionalKeyWord.get().getKeyword();
+    }
+    @Scheduled(cron = "0 0 6 ? * TUE,THU,FRI,SUN", zone = "Asia/Seoul") //화 목 금 일
+    public void getGroupQuestions() {
         Date date = new Date();
 
         List<GroupQuestion> newQuestionList = new ArrayList<>();
 
-        Random random = new Random();
-        random.setSeed(System.currentTimeMillis());
+        String randomWord = getKeyword();
 
         // 나쁨
-        Long randomNum = (long) (random.nextInt(10) + 1);
-        Optional<KeyWord> optionalKeyWord = iKeyWordRepository.findById(randomNum);
-        String randomWord = optionalKeyWord.get().getKeyword();
         String query1 = "평소에 대화를 잘 하지 않는 가족이 서로에게 궁금해 할법한 질문을 1개 추천해줘.";
         query1 += "\n질문의 조건은 다음과 같아.";
         query1 += "\n1.이 가족은 자신의 가족이 서로 친밀하지 않다고 느껴.";
@@ -85,7 +86,6 @@ public class GptService {
         dto.setQuestion_txt(state1);
         dto.setGroup_number(1);
         newQuestionList.add(dto.toEntity());
-        log.info(dto.getQuestion_txt());
 
         // 보통
         String query2 = "일반적인 가족이 서로에게 궁금해 할법한 질문을 1개 추천해줘.";
@@ -113,7 +113,7 @@ public class GptService {
         dto2.setQuestion_txt(state2);
         dto2.setGroup_number(2);
         newQuestionList.add(dto2.toEntity());
-        log.info(dto2.getQuestion_txt());
+
         // 좋음
         String query3 = "화목한 가족이 서로에게 궁금해 할법한 질문을 1개 추천해줘.";
         query3 += "\n질문의 조건은 다음과 같아.";
@@ -142,6 +142,11 @@ public class GptService {
         newQuestionList.add(dto3.toEntity());
 
         iGroupQuestionRepository.saveAll(newQuestionList);
+    }
+
+    //@Scheduled(cron = "0 0 6 ? * MON,WED,SAT", zone = "Asia/Seoul") //월, 수 토
+    public void getQuestions() {
+        Date date = new Date();
 
         // 공통
         SaveQuestionDto questionDto;
@@ -150,7 +155,7 @@ public class GptService {
         query4 += "\n1.이 가족은 자신의 가족이 서로 친밀하지 않다고 느껴.";
         query4 += "\n1.가족의 관계에 도움이 될만한 질문이어야해";
         query4 += "\n2.다음 키워드와 관련된 질문이어야돼: ";
-        query4 += randomWord;
+        query4 += getKeyword();
         query4 += "\n답변 형식은 '오늘의 질문: {오늘의 질문}' 이 형식으로 적어줘";
 
         // Create a request
