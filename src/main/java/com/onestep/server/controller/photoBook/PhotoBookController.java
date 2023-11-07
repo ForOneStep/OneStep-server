@@ -38,9 +38,10 @@ public class PhotoBookController {
     public List<ViewPhotoBookDTO> readPhotoBook(@PathVariable String family_id){
         List<PhotoBook> photoBooks = photoBookService.readPhotoBook(family_id);
         List<ViewPhotoBookDTO> viewPhotoBookDTOS = new ArrayList<>();
-        List<ViewPhotoBookCommentDTO> viewPhotoBookCommentDTOS = new ArrayList<>();
+
 
         for(PhotoBook p : photoBooks){
+            List<ViewPhotoBookCommentDTO> viewPhotoBookCommentDTOS = new ArrayList<>();
             ViewPhotoBookDTO viewPhotoBookDTO = new ViewPhotoBookDTO();
             viewPhotoBookDTO.setPhoto_id(p.getPhoto_id());
             viewPhotoBookDTO.setUser_nickname(p.getUser().getUser_nickname());
