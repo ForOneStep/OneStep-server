@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface IPhotoBookCommentRepository extends JpaRepository<PhotoBookComment,Long> {
     @Query("select c from PhotoBookComment c where c.photoBook.photo_id =:photoBookId")
-    List<PhotoBookComment> findByAnswerId(Long photoBookId);
+    List<PhotoBookComment> findByPhotoBookId(Long photoBookId);
 }
