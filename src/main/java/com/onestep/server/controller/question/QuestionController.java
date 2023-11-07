@@ -1,7 +1,9 @@
 package com.onestep.server.controller.question;
 
 import com.onestep.server.entity.Question;
+import com.onestep.server.entity.question.AnsweredQuestionDto;
 import com.onestep.server.service.question.QuestionService;
+import com.onestep.server.service.question.QuestionWithAnswerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuestionController {
     private final QuestionService questionService;
+    private final QuestionWithAnswerService questionWithAnswerService;
 
     //질문 확인
     @GetMapping(value = "/question/{questionId}")
@@ -21,9 +24,9 @@ public class QuestionController {
         return questionService.showQuestion(questionId);
     }
 
-    //질문 목록확인
-    @GetMapping(value = "/question/list/{questionId}")
-    public List<Question> showQuestionList(@PathVariable Long questionId) {
-        return questionService.showQuestionList(questionId);
+    //우리 가족이 대답한 질문 목록확인
+    @GetMapping(value = "/question/list/{familyId}")
+    public List<AnsweredQuestionDto> showQuestionList(@PathVariable String familyId) {
+         return questionWithAnswerService.getAnsweredQuestionList(familyId);
     }
 }
