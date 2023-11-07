@@ -4,7 +4,9 @@ import javax.persistence.*;
 import lombok.*;
 import javax.persistence.Id;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @ToString
 @Getter
@@ -33,4 +35,7 @@ public class PhotoBook {
     @Temporal(value = TemporalType.DATE)
     @Column(nullable = false)
     private Date write_date;
+
+    @OneToMany(mappedBy = "photoBook", cascade = {CascadeType.REMOVE})
+    private List<PhotoBookComment> photoBookComments = new ArrayList<>();
 }

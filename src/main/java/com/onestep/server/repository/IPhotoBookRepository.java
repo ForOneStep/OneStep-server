@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface IPhotoBookRepository extends JpaRepository<PhotoBook, Long> {
     // 가족 아이디로 사진첩 목록 확인
-    @Query("SELECT p, u FROM PhotoBook p LEFT JOIN User u ON p.user = u WHERE u.family =:family ")
+    @Query("SELECT p FROM PhotoBook p WHERE p.user.family =:family ")
     List<PhotoBook> findPhotoBookByFamilyId(@Param("family") Family family);
 
 }
