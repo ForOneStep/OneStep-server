@@ -69,7 +69,8 @@ public class CommentService {
             if(comment.getComment()!=null){
                 viewCommentDto.setRoot_comment_id(comment.getComment().getComment_id());
             }
-            viewCommentDto.setWriter_id(comment.getUser().getUser_id());
+            viewCommentDto.setWriter_nickname(comment.getUser().getUser_nickname());
+            viewCommentDto.setWriter_profile(comment.getUser().getProfile_path());
             viewCommentDto.setWrite_date(comment.getWrite_date());
 
             viewCommentDtoList.add(viewCommentDto);
