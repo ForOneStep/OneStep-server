@@ -21,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.*;
 
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GptService {
@@ -144,7 +144,7 @@ public class GptService {
         iGroupQuestionRepository.saveAll(newQuestionList);
     }
 
-    //@Scheduled(cron = "0 0 6 ? * MON,WED,SAT", zone = "Asia/Seoul") //월, 수 토
+    @Scheduled(cron = "0 0 6 ? * MON,WED,SAT", zone = "Asia/Seoul") //월, 수,  토
     public void getQuestions() {
         Date date = new Date();
 
