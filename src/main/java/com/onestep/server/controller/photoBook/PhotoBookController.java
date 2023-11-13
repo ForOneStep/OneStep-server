@@ -36,34 +36,8 @@ public class PhotoBookController {
     // 사진첩 사진 리스트 확인
     @GetMapping(value = "/photobook/read/{family_id}")
     public List<ViewPhotoBookDTO> readPhotoBook(@PathVariable String family_id){
-        List<PhotoBook> photoBooks = photoBookService.readPhotoBook(family_id);
-        List<ViewPhotoBookDTO> viewPhotoBookDTOS = new ArrayList<>();
+        List<ViewPhotoBookDTO> viewPhotoBookDTOS = photoBookService.readPhotoBook(family_id);
 
-
-        for(PhotoBook p : photoBooks){
-            List<ViewPhotoBookCommentDTO> viewPhotoBookCommentDTOS = new ArrayList<>();
-            ViewPhotoBookDTO viewPhotoBookDTO = new ViewPhotoBookDTO();
-            viewPhotoBookDTO.setPhoto_id(p.getPhoto_id());
-            viewPhotoBookDTO.setUser_nickname(p.getUser().getUser_nickname());
-            viewPhotoBookDTO.setProfile_path(p.getUser().getProfile_path());
-            viewPhotoBookDTO.setPhoto_img(p.getPhoto_img());
-            viewPhotoBookDTO.setPhoto_txt(p.getPhoto_txt());
-            viewPhotoBookDTO.setWrite_date(p.getWrite_date());
-            for(PhotoBookComment c : p.getPhotoBookComments()) {
-                ViewPhotoBookCommentDTO viewPhotoBookCommentDTO = new ViewPhotoBookCommentDTO();
-                viewPhotoBookCommentDTO.setUser_nickname(c.getUser().getUser_nickname());
-                viewPhotoBookCommentDTO.setProfile_path(c.getUser().getProfile_path());
-                if(c.getPhotoBookComment() != null){
-                    viewPhotoBookCommentDTO.setRoot_comment_id(c.getPhotoBookComment().getPhotoBookComment_id());
-                }
-                viewPhotoBookCommentDTO.setComment_txt(c.getComment_txt());
-                viewPhotoBookCommentDTO.setWrite_date(c.getWrite_date());
-
-                viewPhotoBookCommentDTOS.add(viewPhotoBookCommentDTO);
-            }
-            viewPhotoBookDTO.setViewPhotoBookCommentDTO(viewPhotoBookCommentDTOS);
-            viewPhotoBookDTOS.add(viewPhotoBookDTO);
-        }
         return viewPhotoBookDTOS;
     }
     // 사진첩 사진 삭제
