@@ -4,7 +4,9 @@ import javax.persistence.*;
 import lombok.*;
 import javax.persistence.Id;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @ToString
 @Getter
@@ -27,10 +29,17 @@ public class Quiz {
     @Column(nullable = false)
     private String quiz_txt;
 
-    @Column(length = 100, nullable = false)
-    private String quiz_ans;
+    private Integer quiz_ans;
 
     @Temporal(value = TemporalType.DATE)
     @Column(nullable = false)
     private Date write_date;
+
+    private String answer1;
+    private String answer2;
+    private String answer3;
+    private String answer4;
+
+    @OneToMany(mappedBy = "quiz", cascade = {CascadeType.REMOVE})
+    private List<QuizAnswer> quizAnswers = new ArrayList<>();
 }
