@@ -28,7 +28,7 @@ public class LetterService {
     private final IUserRepository iUserRepository;
     private final IFamilyRepository iFamilyRepository;
 
-    @Scheduled(cron = "0 0 6 ? * 5", zone = "Asia/Seoul") //매주 금요일 오전 6시마다
+    @Scheduled(cron = "0 0 6 ? * FRI", zone = "Asia/Seoul") //매주 금요일 오전 6시마다
     public void changeLetterState(){
         iLetterRepository.changeLetterState();
     }
