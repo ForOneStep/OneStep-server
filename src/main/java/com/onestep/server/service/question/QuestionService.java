@@ -26,7 +26,7 @@ public class QuestionService {
     private final IQuestionRepository iQuestionRepository;
     private final IGroupQuestionRepository iGroupQuestionRepository;
 
-    public ShowQuestionDto showQuestion(int groupNumber){
+    public ShowQuestionDto showTodaysQuestion(int groupNumber){
 
         Date date = new Date();
         LocalTime now = LocalTime.now();
@@ -44,12 +44,43 @@ public class QuestionService {
             dto.setQuestion_id(groupQuestion.getQuestion_id());
             dto.setQuestion_txt(groupQuestion.getQuestion_txt());
             dto.setDate(groupQuestion.getQuestion_date());
-            dto.setGroup_number(groupQuestion.getGroup_number());
 
             return dto;
         }
 
         Optional<Question> optionalQuestion = iQuestionRepository.findQuestionByDate(date);
+
+        if(optionalQuestion.isPresent()) {
+            Question question = optionalQuestion.get();
+
+            ShowQuestionDto dto = new ShowQuestionDto();
+            dto.setQuestion_id(question.getQuestion_id());
+            dto.setQuestion_txt(question.getQuestion_txt());
+            dto.setDate(question.getQuestion_date());
+
+            return dto;
+        }
+
+
+        throw new IllegalStateException("잘못된 요청입니다.");
+    }
+
+    public ShowQuestionDto showQuestion(long questionId){
+
+
+        Optional<GroupQuestion> optionalGroupQuestion = iGroupQuestionRepository.findById(questionId);
+
+        if(optionalGroupQuestion.isPresent()) {
+            GroupQuestion groupQuestion = optionalGroupQuestion.get();
+            ShowQuestionDto dto = new ShowQuestionDto();
+            dto.setQuestion_id(groupQuestion.getQuestion_id());
+            dto.setQuestion_txt(groupQuestion.getQuestion_txt());
+            dto.setDate(groupQuestion.getQuestion_date());
+
+            return dto;
+        }
+
+        Optional<Question> optionalQuestion = iQuestionRepository.findById(questionId);
 
         if(optionalQuestion.isPresent()) {
             Question question = optionalQuestion.get();

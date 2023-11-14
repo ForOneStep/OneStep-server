@@ -19,9 +19,15 @@ public class QuestionController {
     private final QuestionWithAnswerService questionWithAnswerService;
 
     //오늘의 질문 확인
-    @GetMapping(value = "/question/{groupNumber}")
-    public ShowQuestionDto showQuestion(@PathVariable int groupNumber){
-        return questionService.showQuestion( groupNumber);
+    @GetMapping(value = "/question/daily/{groupNumber}")
+    public ShowQuestionDto showTodaysQuestion(@PathVariable int groupNumber){
+        return questionService.showTodaysQuestion( groupNumber);
+    }
+
+    //단일 질문 확인
+    @GetMapping(value = "/question/{questionId}")
+    public ShowQuestionDto showQuestion(@PathVariable long questionId){
+        return questionService.showQuestion( questionId);
     }
 
     //우리 가족이 대답한 질문 목록확인

@@ -13,7 +13,5 @@ public class ShowQuestionDto {
 
     private Date date;
 
-    private int group_number;
-
     private String question_txt;
 }
