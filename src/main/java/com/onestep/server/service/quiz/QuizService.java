@@ -2,8 +2,10 @@ package com.onestep.server.service.quiz;
 
 import com.onestep.server.entity.Family;
 import com.onestep.server.entity.Quiz;
+import com.onestep.server.entity.QuizAnswer;
 import com.onestep.server.entity.User;
 import com.onestep.server.entity.quiz.QuizAnswerDTO;
+import com.onestep.server.entity.quiz.QuizAnswerRequestDTO;
 import com.onestep.server.entity.quiz.QuizDTO;
 import com.onestep.server.entity.quiz.QuizRequestDTO;
 import com.onestep.server.repository.IQuizAnswerRepository;
@@ -27,6 +29,7 @@ public class QuizService {
     private final IQuizRepository iQuizRepository;
     private final IQuizAnswerRepository iQuizAnswerRepository;
     private final IUserRepository iUserRepository;
+
     public Quiz writeQuiz(QuizRequestDTO quizRequestDTO){
         Optional<User> optionalUser = iUserRepository.findById(quizRequestDTO.getUser_id());
         User user = optionalUser.get();
@@ -64,5 +67,45 @@ public class QuizService {
         }
 
         return addQuiz;
+    }
+
+    //퀴즈 생성 가능 여부
+    public Boolean canQuiz(String family_id){
+        Boolean canQuiz = true;
+        Date writeDate = new Date();
+        LocalTime now = LocalTime.now();
+
+        if(now.getHour()<6){
+            Date dDate = new Date();
+            writeDate = new Date(dDate.getTime()+(1000*60*60*24*-1));
+        }
+        Optional<Quiz> optionalQuiz = iQuizRepository.findQuizByWriteDate(family_id,writeDate);
+        // 같은 날에 퀴즈를 생성 했을 시
+        if(optionalQuiz.isPresent()){
+            canQuiz = false;
+        }
+
+        return canQuiz;
+    }
+
+    //퀴즈 답변
+    public QuizAnswer answerQuiz(QuizAnswerRequestDTO quizAnswerRequestDTO){
+        Optional<QuizAnswer> optionalQuizAnswer = iQuizAnswerRepository.findQuizByUser(quizAnswerRequestDTO.getQuiz_id(),quizAnswerRequestDTO.getUser_id());
+        Optional<Quiz> quiz = iQuizRepository.findById(quizAnswerRequestDTO.getQuiz_id());
+        Integer answer = quiz.get().getQuiz_ans();
+
+        QuizAnswer quizAnswer = new QuizAnswer();
+        quizAnswer.setQuizAnswer_id(optionalQuizAnswer.get().getQuizAnswer_id());
+        quizAnswer.setQuiz(optionalQuizAnswer.get().getQuiz());
+        quizAnswer.setUser(optionalQuizAnswer.get().getUser());
+        quizAnswer.setQuiz_ans(quizAnswerRequestDTO.getQuiz_ans());
+
+        if(quizAnswerRequestDTO.getQuiz_ans().equals(answer)){
+            quizAnswer.setQuiz_state(1);
+        }else{
+            quizAnswer.setQuiz_state(0);
+        }
+
+        return iQuizAnswerRepository.save(quizAnswer);
     }
 }
