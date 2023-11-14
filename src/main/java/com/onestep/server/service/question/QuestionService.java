@@ -40,25 +40,15 @@ public class QuestionService {
 
         if(optionalGroupQuestion.isPresent()) {
             GroupQuestion groupQuestion = optionalGroupQuestion.get();
-            ShowQuestionDto dto = new ShowQuestionDto();
-            dto.setQuestion_id(groupQuestion.getQuestion_id());
-            dto.setQuestion_txt(groupQuestion.getQuestion_txt());
-            dto.setDate(groupQuestion.getQuestion_date());
-
-            return dto;
+            return makeDtoByGroupQuestion(groupQuestion);
         }
 
         Optional<Question> optionalQuestion = iQuestionRepository.findQuestionByDate(date);
 
         if(optionalQuestion.isPresent()) {
+
             Question question = optionalQuestion.get();
-
-            ShowQuestionDto dto = new ShowQuestionDto();
-            dto.setQuestion_id(question.getQuestion_id());
-            dto.setQuestion_txt(question.getQuestion_txt());
-            dto.setDate(question.getQuestion_date());
-
-            return dto;
+            return makeDtoByQuestion(question);
         }
 
 
@@ -72,28 +62,35 @@ public class QuestionService {
 
         if(optionalGroupQuestion.isPresent()) {
             GroupQuestion groupQuestion = optionalGroupQuestion.get();
-            ShowQuestionDto dto = new ShowQuestionDto();
-            dto.setQuestion_id(groupQuestion.getQuestion_id());
-            dto.setQuestion_txt(groupQuestion.getQuestion_txt());
-            dto.setDate(groupQuestion.getQuestion_date());
-
-            return dto;
+            return makeDtoByGroupQuestion(groupQuestion);
         }
 
         Optional<Question> optionalQuestion = iQuestionRepository.findById(questionId);
 
         if(optionalQuestion.isPresent()) {
             Question question = optionalQuestion.get();
-
-            ShowQuestionDto dto = new ShowQuestionDto();
-            dto.setQuestion_id(question.getQuestion_id());
-            dto.setQuestion_txt(question.getQuestion_txt());
-            dto.setDate(question.getQuestion_date());
-
-            return dto;
+            return makeDtoByQuestion(question);
         }
 
 
         throw new IllegalStateException("잘못된 요청입니다.");
+    }
+
+    private ShowQuestionDto makeDtoByGroupQuestion(GroupQuestion groupQuestion){
+        ShowQuestionDto dto = new ShowQuestionDto();
+        dto.setQuestion_id(groupQuestion.getQuestion_id());
+        dto.setQuestion_txt(groupQuestion.getQuestion_txt());
+        dto.setDate(groupQuestion.getQuestion_date());
+        return dto;
+    }
+
+    private ShowQuestionDto makeDtoByQuestion(Question question){
+
+        ShowQuestionDto dto = new ShowQuestionDto();
+        dto.setQuestion_id(question.getQuestion_id());
+        dto.setQuestion_txt(question.getQuestion_txt());
+        dto.setDate(question.getQuestion_date());
+
+        return dto;
     }
 }
