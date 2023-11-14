@@ -4,10 +4,7 @@ import com.onestep.server.entity.Family;
 import com.onestep.server.entity.Quiz;
 import com.onestep.server.entity.QuizAnswer;
 import com.onestep.server.entity.User;
-import com.onestep.server.entity.quiz.QuizAnswerDTO;
-import com.onestep.server.entity.quiz.QuizAnswerRequestDTO;
-import com.onestep.server.entity.quiz.QuizDTO;
-import com.onestep.server.entity.quiz.QuizRequestDTO;
+import com.onestep.server.entity.quiz.*;
 import com.onestep.server.repository.IQuizAnswerRepository;
 import com.onestep.server.repository.IQuizRepository;
 import com.onestep.server.repository.IUserRepository;
@@ -17,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -107,5 +105,25 @@ public class QuizService {
         }
 
         return iQuizAnswerRepository.save(quizAnswer);
+    }
+
+    //퀴즈 확인
+    public List<QuizAnswerCheckDTO> checkAnswer(Long quiz_id){
+        Optional<Quiz> optionalQuiz = iQuizRepository.findById(quiz_id);
+        List<QuizAnswer> quizAnswers = optionalQuiz.get().getQuizAnswers();
+        List<QuizAnswerCheckDTO> quizAnswerCheck = new ArrayList<>();
+        for(QuizAnswer q : quizAnswers){
+            QuizAnswerCheckDTO quizAnswerCheckDTO = new QuizAnswerCheckDTO();
+
+            User answer = q.getUser();
+            quizAnswerCheckDTO.setQuizAnswer_id(q.getQuizAnswer_id());
+            quizAnswerCheckDTO.setUser_id(answer.getUser_id());
+            quizAnswerCheckDTO.setQuiz_ans(q.getQuiz_ans());
+            quizAnswerCheckDTO.setQuiz_state(q.getQuiz_state());
+
+            quizAnswerCheck.add(quizAnswerCheckDTO);
+
+        }
+        return quizAnswerCheck;
     }
 }

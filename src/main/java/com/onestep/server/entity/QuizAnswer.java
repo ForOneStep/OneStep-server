@@ -1,5 +1,6 @@
 package com.onestep.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -22,6 +23,7 @@ public class QuizAnswer {
     private Long quizAnswer_id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name="quiz_id")
     private Quiz quiz;
 
