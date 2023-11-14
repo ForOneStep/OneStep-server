@@ -1,12 +1,14 @@
 package com.onestep.server.entity.quiz;
 
 import com.onestep.server.entity.Quiz;
+import com.onestep.server.entity.QuizAnswer;
 import com.onestep.server.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,6 +23,7 @@ public class QuizDTO {
     private String answer4;
     private Integer quiz_ans;
     private Date write_date;
+    private List<QuizAnswer> quizAnswers;
 
     public Quiz toEntity(){
         return Quiz.builder()
@@ -32,6 +35,7 @@ public class QuizDTO {
                 .answer3(answer3)
                 .answer4(answer4)
                 .quiz_ans(quiz_ans)
-                .write_date(write_date).build();
+                .write_date(write_date)
+                .quizAnswers(quizAnswers).build();
     }
 }
