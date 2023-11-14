@@ -2,6 +2,7 @@ package com.onestep.server.controller.letter;
 
 import com.onestep.server.entity.Letter;
 import com.onestep.server.entity.letter.LetterListDTO;
+import com.onestep.server.entity.letter.WriteLetterDto;
 import com.onestep.server.service.letter.LetterService;
 import com.onestep.server.service.question.GptService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class LetterController {
 
     //익명 쪽지 작성
     @PostMapping(value = "/letter/write")
-    public Letter writeLetter(@RequestBody Letter letter){
+    public WriteLetterDto writeLetter(@RequestBody WriteLetterDto letter){
         letterService.writeLetter(letter);
         return letter;
     }

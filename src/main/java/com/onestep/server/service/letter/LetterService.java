@@ -4,6 +4,7 @@ import com.onestep.server.entity.Family;
 import com.onestep.server.entity.Letter;
 import com.onestep.server.entity.User;
 import com.onestep.server.entity.letter.LetterListDTO;
+import com.onestep.server.entity.letter.WriteLetterDto;
 import com.onestep.server.repository.IFamilyRepository;
 import com.onestep.server.repository.ILetterRepository;
 import com.onestep.server.repository.IUserRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,13 +28,21 @@ public class LetterService {
     private final IUserRepository iUserRepository;
     private final IFamilyRepository iFamilyRepository;
 
-    @Scheduled(cron = "0 0 6 ? * 5", zone = "Asia/Seoul") //매주 금요일 오전 6시마다
+    @Scheduled(cron = "0 0 6 ? * FRI", zone = "Asia/Seoul") //매주 금요일 오전 6시마다
     public void changeLetterState(){
         iLetterRepository.changeLetterState();
     }
 
     //익명 쪽지 작성
-    public void writeLetter(Letter letter){
+    public void writeLetter(WriteLetterDto letterDto){
+        Optional<User> optionalUser = iUserRepository.findById(letterDto.getWriter_id());
+        if(optionalUser.isEmpty()) throw new IllegalArgumentException("아이디를 찾을 수 없습니다.");
+        Letter letter = new Letter();
+        letter.setLetter_id(null);
+        letter.setLetter_txt(letterDto.getLetter_txt());
+        letter.setLetter_title(letterDto.getLetter_title());
+        letter.setWrite_date(new Date());
+        letter.setUser(optionalUser.get());
         iLetterRepository.save(letter);
     }
 
