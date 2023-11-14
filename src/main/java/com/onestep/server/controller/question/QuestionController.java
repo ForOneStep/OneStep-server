@@ -1,7 +1,7 @@
 package com.onestep.server.controller.question;
 
-import com.onestep.server.entity.Question;
 import com.onestep.server.entity.question.AnsweredQuestionDto;
+import com.onestep.server.entity.question.ShowQuestionDto;
 import com.onestep.server.service.question.QuestionService;
 import com.onestep.server.service.question.QuestionWithAnswerService;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +18,10 @@ public class QuestionController {
     private final QuestionService questionService;
     private final QuestionWithAnswerService questionWithAnswerService;
 
-    //질문 확인
-    @GetMapping(value = "/question/{questionId}")
-    public Question showQuestion(@PathVariable Long questionId){
-        return questionService.showQuestion(questionId);
+    //오늘의 질문 확인
+    @GetMapping(value = "/question/{groupNumber}")
+    public ShowQuestionDto showQuestion(@PathVariable int groupNumber){
+        return questionService.showQuestion( groupNumber);
     }
 
     //우리 가족이 대답한 질문 목록확인
