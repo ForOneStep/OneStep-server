@@ -4,10 +4,7 @@ import com.onestep.server.entity.Family;
 import com.onestep.server.entity.Quiz;
 import com.onestep.server.entity.QuizAnswer;
 import com.onestep.server.entity.User;
-import com.onestep.server.entity.quiz.QuizAnswerDTO;
-import com.onestep.server.entity.quiz.QuizAnswerRequestDTO;
-import com.onestep.server.entity.quiz.QuizDTO;
-import com.onestep.server.entity.quiz.QuizRequestDTO;
+import com.onestep.server.entity.quiz.*;
 import com.onestep.server.repository.IQuizAnswerRepository;
 import com.onestep.server.repository.IQuizRepository;
 import com.onestep.server.repository.IUserRepository;
@@ -17,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -107,5 +105,60 @@ public class QuizService {
         }
 
         return iQuizAnswerRepository.save(quizAnswer);
+    }
+
+    //퀴즈 확인
+    public List<QuizAnswerCheckDTO> checkAnswer(Long quiz_id){
+        Optional<Quiz> optionalQuiz = iQuizRepository.findById(quiz_id);
+        List<QuizAnswer> quizAnswers = optionalQuiz.get().getQuizAnswers();
+        List<QuizAnswerCheckDTO> quizAnswerCheck = new ArrayList<>();
+        for(QuizAnswer q : quizAnswers){
+            QuizAnswerCheckDTO quizAnswerCheckDTO = new QuizAnswerCheckDTO();
+
+            User answer = q.getUser();
+            quizAnswerCheckDTO.setQuizAnswer_id(q.getQuizAnswer_id());
+            quizAnswerCheckDTO.setUser_id(answer.getUser_id());
+            quizAnswerCheckDTO.setQuiz_ans(q.getQuiz_ans());
+            quizAnswerCheckDTO.setQuiz_state(q.getQuiz_state());
+
+            quizAnswerCheck.add(quizAnswerCheckDTO);
+
+        }
+        return quizAnswerCheck;
+    }
+
+    // 퀴즈 목록 확인
+    public List<QuizListDTO> quizList(String family_id){
+        List<Quiz> quizList = iQuizRepository.findQuizByFamily(family_id);
+        List<QuizListDTO> quizLists = new ArrayList<>();
+
+        for(Quiz q : quizList){
+            QuizListDTO quizListDTO = new QuizListDTO();
+            quizListDTO.setQuiz_id(q.getQuiz_id());
+            quizListDTO.setWriter_id(q.getUser().getUser_id());
+            quizListDTO.setQuiz_txt(q.getQuiz_txt());
+            quizListDTO.setAnswer1(q.getAnswer1());
+            quizListDTO.setAnswer2(q.getAnswer2());
+            quizListDTO.setAnswer3(q.getAnswer3());
+            quizListDTO.setAnswer4(q.getAnswer4());
+            quizListDTO.setQuiz_ans(q.getQuiz_ans());
+            quizListDTO.setWrite_date(q.getWrite_date());
+
+            List<QuizAnswer> quizAnswers = q.getQuizAnswers();
+            List<QuizAnswerCheckDTO> quizAnswerCheck = new ArrayList<>();
+            for (QuizAnswer qa : quizAnswers) {
+                QuizAnswerCheckDTO quizAnswerCheckDTO = new QuizAnswerCheckDTO();
+                User answer = qa.getUser();
+                quizAnswerCheckDTO.setQuizAnswer_id(qa.getQuizAnswer_id());
+                quizAnswerCheckDTO.setUser_id(answer.getUser_id());
+                quizAnswerCheckDTO.setQuiz_ans(qa.getQuiz_ans());
+                quizAnswerCheckDTO.setQuiz_state(qa.getQuiz_state());
+
+                quizAnswerCheck.add(quizAnswerCheckDTO);
+            }
+            quizListDTO.setQuizAnswers(quizAnswerCheck);
+            quizLists.add(quizListDTO);
+        }
+        return quizLists;
     }
 }
