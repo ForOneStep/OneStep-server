@@ -27,6 +27,7 @@ public class QuizService {
     private final IQuizRepository iQuizRepository;
     private final IQuizAnswerRepository iQuizAnswerRepository;
     private final IUserRepository iUserRepository;
+
     public Quiz writeQuiz(QuizRequestDTO quizRequestDTO){
         Optional<User> optionalUser = iUserRepository.findById(quizRequestDTO.getUser_id());
         User user = optionalUser.get();
@@ -64,5 +65,22 @@ public class QuizService {
         }
 
         return addQuiz;
+    }
+
+    public Boolean canQuiz(String family_id){
+        Boolean canQuiz = true;
+        Date writeDate = new Date();
+        LocalTime now = LocalTime.now();
+
+        if(now.getHour()<6){
+            Date dDate = new Date();
+            writeDate = new Date(dDate.getTime()+(1000*60*60*24*-1));
+        }
+        Optional<Quiz> optionalQuiz = iQuizRepository.findQuizByWriteDate(family_id,writeDate);
+        if(optionalQuiz.isPresent()){
+            canQuiz = false;
+        }
+
+        return canQuiz;
     }
 }
