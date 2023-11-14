@@ -2,6 +2,7 @@ package com.onestep.server.service.answer;
 
 import com.onestep.server.entity.*;
 import com.onestep.server.entity.answer.AnswerDTO;
+import com.onestep.server.entity.answer.AnswerReturnDTO;
 import com.onestep.server.entity.like.LikeAnswerClass;
 import com.onestep.server.entity.like.LikeAnswerDTO;
 import com.onestep.server.repository.*;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +24,7 @@ public class AnswerService {
     private final IAnswerRepository iAnswerRepository;
     private final IUserRepository iUserRepository;
     private final IQuestionRepository iQuestionRepository;
+    private final IGroupQuestionRepository iGroupQuestionRepository;
     private final IFamilyRepository iFamilyRepository;
     private final ILikeAnswerRepository iLikeAnswerRepository;
 
@@ -48,13 +51,47 @@ public class AnswerService {
         return addAnswer;
     }
     //답변 읽기
-    public List<Answer> readAnswer(Long questionId,String familyId){
-        Optional<Question> optionalQuestion = iQuestionRepository.findById(questionId);
-        Question question =optionalQuestion.get();
+    public List<AnswerReturnDTO> readAnswer(Long questionId,String familyId){
+
         Optional<Family> optionalFamily = iFamilyRepository.findById(familyId);
         Family family = optionalFamily.get();
-        List<Answer> answers = iAnswerRepository.findAnswerByQuestionIdAndFamId(question,family);
-        return answers;
+
+        Optional<Question> optionalQuestion = iQuestionRepository.findById(questionId);
+        List<Answer> answers=null;
+        if(optionalQuestion.isPresent()){
+            Question question =optionalQuestion.get();
+            answers = iAnswerRepository.findAnswerByQuestionIdAndFamId(question,family);
+            return makeDto(answers);
+        }
+        Optional<GroupQuestion> optionalGroupQuestion = iGroupQuestionRepository.findById(questionId);
+        if(optionalGroupQuestion.isPresent()){
+            GroupQuestion question = optionalGroupQuestion.get();
+            answers = iAnswerRepository.findAnswerByGroupQuestionIdAndFamId(question,family);
+            return makeDto(answers);
+        }
+
+        throw new IllegalStateException("답변을 읽어올 수 없습니다.");
+    }
+
+    private List<AnswerReturnDTO> makeDto(List<Answer> answers){
+        List<AnswerReturnDTO> answerReturnsDTO = new ArrayList<>();
+
+        for(Answer re : answers){
+            AnswerReturnDTO answerReturnDTO = new AnswerReturnDTO();
+            answerReturnDTO.setAnswer_id(re.getAnswer_id());
+            if(re.getQuestion()!=null) answerReturnDTO.setQuestion_id(re.getQuestion().getQuestion_id());
+            if(re.getGroupQuestion()!=null) answerReturnDTO.setQuestion_id(re.getGroupQuestion().getQuestion_id());
+            answerReturnDTO.setUser_id(re.getUser().getUser_id());
+            answerReturnDTO.setUser_nickname(re.getUser().getUser_nickname());
+            answerReturnDTO.setProfile_path(re.getUser().getProfile_path());
+            answerReturnDTO.setAnswer_txt(re.getAnswer_txt());
+            answerReturnDTO.setAnswer_img(re.getAnswer_img());
+            answerReturnDTO.setWrite_date(re.getWrite_date());
+            answerReturnDTO.setLike(re.getLike());
+
+            answerReturnsDTO.add(answerReturnDTO);
+        }
+        return answerReturnsDTO;
     }
 
     //답변 수정

@@ -43,27 +43,11 @@ public class AnswerController {
         }
         return answer.getQuestion().getQuestion_id()+"번 질문에 대한 답변 작성이 완료되었습니다.";
     }
+
     //답변 읽기
     @GetMapping("/answer/read/{question_id}/{family_id}")
     public List<AnswerReturnDTO> getAnswer(@PathVariable Long question_id,@PathVariable String family_id){
-        List<Answer> answers = answerService.readAnswer(question_id,family_id);
-        List<AnswerReturnDTO> answerReturnsDTO = new ArrayList<>();
-
-        for(Answer re : answers){
-            AnswerReturnDTO answerReturnDTO = new AnswerReturnDTO();
-            answerReturnDTO.setAnswer_id(re.getAnswer_id());
-            answerReturnDTO.setQuestion_id(re.getQuestion().getQuestion_id());
-            answerReturnDTO.setUser_id(re.getUser().getUser_id());
-            answerReturnDTO.setUser_nickname(re.getUser().getUser_nickname());
-            answerReturnDTO.setProfile_path(re.getUser().getProfile_path());
-            answerReturnDTO.setAnswer_txt(re.getAnswer_txt());
-            answerReturnDTO.setAnswer_img(re.getAnswer_img());
-            answerReturnDTO.setWrite_date(re.getWrite_date());
-            answerReturnDTO.setLike(re.getLike());
-
-            answerReturnsDTO.add(answerReturnDTO);
-        }
-        return answerReturnsDTO;
+        return answerService.readAnswer(question_id,family_id);
     }
 
     //답변 수정

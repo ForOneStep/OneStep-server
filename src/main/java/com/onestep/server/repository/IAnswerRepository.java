@@ -16,6 +16,9 @@ public interface IAnswerRepository extends JpaRepository<Answer,Long> {
     @Query("select a from Answer a left join User u on a.user.user_id = u.user_id where a.question = :question and u.family =:family")
     List<Answer> findAnswerByQuestionIdAndFamId(@Param("question")Question question, @Param("family")Family family);
 
+    @Query("select a from Answer a left join User u on a.user.user_id = u.user_id where a.groupQuestion = :question and u.family =:family")
+    List<Answer> findAnswerByGroupQuestionIdAndFamId(@Param("question")GroupQuestion question, @Param("family")Family family);
+
     @Query("select distinct a.groupQuestion from Answer a left join User u on a.user.user_id = u.user_id where u.family =:family")
     List<GroupQuestion> findAnsweredGroupQuestionsByFamId(@Param("family")Family family);
 
