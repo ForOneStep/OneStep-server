@@ -1,7 +1,5 @@
 package com.onestep.server.controller.quiz;
 
-import com.onestep.server.entity.Quiz;
-import com.onestep.server.entity.quiz.QuizDTO;
 import com.onestep.server.entity.quiz.QuizRequestDTO;
 import com.onestep.server.service.quiz.QuizService;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class QuizController {
 
     private final QuizService quizService;
+
+    //퀴즈 생성
     @PostMapping(value = "/quiz/create")
     public String writeQuiz(@RequestBody QuizRequestDTO quizRequestDTO){
          quizService.writeQuiz(quizRequestDTO);
         return quizRequestDTO.getUser_id()+"님이 작성한 퀴즈가 등록되었습니다.";
     }
+
+    //퀴즈 답변
+   // @PostMapping(value = "/quiz/answer")
+   // public String answerQuiz(@RequestBody )
 }
