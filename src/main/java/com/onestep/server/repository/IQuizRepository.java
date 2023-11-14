@@ -18,4 +18,6 @@ public interface IQuizRepository extends JpaRepository<Quiz, Long> {
     @Query("SELECT q FROM Quiz q WHERE q.user.family.fam_id =:family_id and q.write_date =:date")
     Optional<Quiz> findQuizByWriteDate(@Param("family_id") String family_id,@Param("date") Date date);
 
+    @Query("select q from Quiz q where q.user.family.fam_id =:family_id")
+    List<Quiz> findQuizByFamily(@Param("family_id") String family_id);
 }

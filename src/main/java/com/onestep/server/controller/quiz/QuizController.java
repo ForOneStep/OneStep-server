@@ -1,8 +1,10 @@
 package com.onestep.server.controller.quiz;
 
+import com.onestep.server.entity.Quiz;
 import com.onestep.server.entity.QuizAnswer;
 import com.onestep.server.entity.quiz.QuizAnswerCheckDTO;
 import com.onestep.server.entity.quiz.QuizAnswerRequestDTO;
+import com.onestep.server.entity.quiz.QuizListDTO;
 import com.onestep.server.entity.quiz.QuizRequestDTO;
 import com.onestep.server.service.quiz.QuizService;
 import lombok.RequiredArgsConstructor;
@@ -44,4 +46,8 @@ public class QuizController {
     public List<QuizAnswerCheckDTO> checkAnswer(@PathVariable Long quiz_id){
         return quizService.checkAnswer(quiz_id);
     }
+
+    //퀴즈 목록 확인
+    @GetMapping(value = "/quiz/quizList/{family_id}")
+    public List<QuizListDTO> quizList(@PathVariable String family_id){return quizService.quizList(family_id);}
 }
