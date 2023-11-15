@@ -10,7 +10,11 @@ import java.util.List;
 
 public interface IUserRepository extends JpaRepository<User, String> {
 
-    //가족 아이디로 가족 구성원 확인
+    //가족 객체로 가족 구성원 확인
     @Query("select u from User u where u.family =:family")
     List<User> findUserByFamily(@Param("family")Family family);
+
+    //가족 아이디로 가족 구성원 확인
+    @Query("select u from User u where u.family.fam_id =:family_id")
+    List<User> findUserByFamId(@Param("family_id")String family_id);
 }
