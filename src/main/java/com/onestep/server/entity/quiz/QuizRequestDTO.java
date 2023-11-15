@@ -1,11 +1,9 @@
 package com.onestep.server.entity.quiz;
 
-import com.onestep.server.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 
 @Getter
 @Setter
