@@ -28,9 +28,6 @@ public class Family {
     @ColumnDefault("0")
     private int level;
 
-    @ColumnDefault("true")
-    private Boolean is_valid;
-
     @Column(nullable = false)
     private int fam_number;
 
