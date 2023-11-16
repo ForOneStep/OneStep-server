@@ -5,6 +5,7 @@ import com.onestep.server.entity.Answer;
 import com.onestep.server.entity.GroupQuestion;
 import com.onestep.server.entity.answer.AnswerDTO;
 import com.onestep.server.entity.answer.AnswerReturnDTO;
+import com.onestep.server.entity.answer.AnswerWithValidDTO;
 import com.onestep.server.service.answer.AnswerService;
 import com.onestep.server.service.image.S3Uploader;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class AnswerController {
 
     //답변 읽기
     @GetMapping("/answer/read/{question_id}/{family_id}")
-    public List<AnswerReturnDTO> getAnswer(@PathVariable Long question_id,@PathVariable String family_id){
+    public AnswerWithValidDTO getAnswer(@PathVariable Long question_id, @PathVariable String family_id){
         return answerService.readAnswer(question_id,family_id);
     }
 
