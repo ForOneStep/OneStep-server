@@ -2,6 +2,7 @@ package com.onestep.server.service.answer;
 
 import com.onestep.server.entity.*;
 import com.onestep.server.entity.answer.AnswerDTO;
+import com.onestep.server.entity.answer.AnswerGroupQuestionDTO;
 import com.onestep.server.entity.answer.AnswerReturnDTO;
 import com.onestep.server.entity.like.LikeAnswerClass;
 import com.onestep.server.entity.like.LikeAnswerDTO;
@@ -29,26 +30,46 @@ public class AnswerService {
     private final ILikeAnswerRepository iLikeAnswerRepository;
 
     // 답변 작성
-    public Answer writeAnswer(Long questionId, String userId,String answerTxt, String answerImg){
+    public String writeAnswer(Long questionId, String userId,String answerTxt, String answerImg){
         Optional<User> optionalUser= iUserRepository.findById(userId);
         User user=optionalUser.get();
+
+        Answer addAnswer = null;
         Optional<Question> optionalQuestion = iQuestionRepository.findById(questionId);
-        Question question=optionalQuestion.get();
+        if(optionalQuestion.isPresent()) {
+            Question question = optionalQuestion.get();
+            Date date = new Date();
+            AnswerDTO answerDTO = new AnswerDTO();
+            answerDTO.setQuestion(question);
+            answerDTO.setUser(user);
+            answerDTO.setAnswer_txt(answerTxt);
+            answerDTO.setAnswer_date(date);
+            addAnswer = iAnswerRepository.save(answerDTO.toEntity());
+            //답변 저장
+            if(answerImg != "") {
+                addAnswer.setAnswer_img(answerImg);
+            }
 
-        Date date = new Date();
-        AnswerDTO answerDTO = new AnswerDTO();
-        answerDTO.setQuestion(question);
-        answerDTO.setUser(user);
-        answerDTO.setAnswer_txt(answerTxt);
-        answerDTO.setAnswer_date(date);
-
-        //답변 저장
-        Answer addAnswer = iAnswerRepository.save(answerDTO.toEntity());
-        if(answerImg != "") {
-            addAnswer.setAnswer_img(answerImg);
+            return addAnswer.getQuestion().getQuestion_id()+"번 질문에 대한 답변 작성이 완료되었습니다.";
+        }
+        Optional<GroupQuestion> optionalGroupQuestion = iGroupQuestionRepository.findById(questionId);
+        if(optionalGroupQuestion.isPresent()){
+            GroupQuestion groupQuestion = optionalGroupQuestion.get();
+            Date date = new Date();
+            AnswerGroupQuestionDTO answerGroupQuestionDTO = new AnswerGroupQuestionDTO();
+            answerGroupQuestionDTO.setGroupQuestion(groupQuestion);
+            answerGroupQuestionDTO.setUser(user);
+            answerGroupQuestionDTO.setAnswer_txt(answerTxt);
+            answerGroupQuestionDTO.setAnswer_date(date);
+            addAnswer = iAnswerRepository.save(answerGroupQuestionDTO.toEntity());
+            //답변 저장
+            if(answerImg != "") {
+                addAnswer.setAnswer_img(answerImg);
+            }
+            return addAnswer.getGroupQuestion().getQuestion_id()+"번 질문에 대한 답변 작성이 완료되었습니다.";
         }
 
-        return addAnswer;
+        return "답변 작성 실패";
     }
     //답변 읽기
     public List<AnswerReturnDTO> readAnswer(Long questionId,String familyId){

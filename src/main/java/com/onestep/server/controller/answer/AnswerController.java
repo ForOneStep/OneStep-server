@@ -29,7 +29,7 @@ public class AnswerController {
     //답변 작성
     @PostMapping(value = "/answer/create/{question_id}/{user_id}", consumes = {MediaType.APPLICATION_JSON_VALUE, "multipart/form-data"})
     public String writeAnswer(@PathVariable Long question_id,@PathVariable String user_id, @RequestPart(value = "answerTxt") String answerTxt, @RequestPart(value = "img") MultipartFile img){
-        Answer answer = null;
+        String answer = null;
         try{
             log.info("imgTest={}",img);
             if(img.isEmpty()) {
@@ -41,7 +41,8 @@ public class AnswerController {
         }catch (IOException e){
             e.printStackTrace();
         }
-        return answer.getQuestion().getQuestion_id()+"번 질문에 대한 답변 작성이 완료되었습니다.";
+
+        return answer;
     }
 
     //답변 읽기
