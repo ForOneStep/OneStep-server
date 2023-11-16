@@ -3,6 +3,7 @@ package com.onestep.server.service.answer;
 import com.onestep.server.entity.*;
 import com.onestep.server.entity.answer.AnswerDTO;
 import com.onestep.server.entity.answer.AnswerReturnDTO;
+import com.onestep.server.entity.answer.AnswerWithValidDTO;
 import com.onestep.server.entity.like.LikeAnswerClass;
 import com.onestep.server.entity.like.LikeAnswerDTO;
 import com.onestep.server.repository.*;
@@ -51,23 +52,28 @@ public class AnswerService {
         return addAnswer;
     }
     //답변 읽기
-    public List<AnswerReturnDTO> readAnswer(Long questionId,String familyId){
+    public AnswerWithValidDTO readAnswer(Long questionId, String familyId){
+        AnswerWithValidDTO dto = new AnswerWithValidDTO();
 
         Optional<Family> optionalFamily = iFamilyRepository.findById(familyId);
         Family family = optionalFamily.get();
 
         Optional<Question> optionalQuestion = iQuestionRepository.findById(questionId);
-        List<Answer> answers=null;
+        List<Answer> answers;
         if(optionalQuestion.isPresent()){
             Question question =optionalQuestion.get();
             answers = iAnswerRepository.findAnswerByQuestionIdAndFamId(question,family);
-            return makeDto(answers);
+            dto.setCanRead(answers.size() == family.getHead_count());
+            dto.setAnswers( makeDto(answers));
+            return dto;
         }
         Optional<GroupQuestion> optionalGroupQuestion = iGroupQuestionRepository.findById(questionId);
         if(optionalGroupQuestion.isPresent()){
             GroupQuestion question = optionalGroupQuestion.get();
             answers = iAnswerRepository.findAnswerByGroupQuestionIdAndFamId(question,family);
-            return makeDto(answers);
+            dto.setCanRead(answers.size() == family.getHead_count());
+            dto.setAnswers( makeDto(answers));
+            return dto;
         }
 
         throw new IllegalStateException("답변을 읽어올 수 없습니다.");

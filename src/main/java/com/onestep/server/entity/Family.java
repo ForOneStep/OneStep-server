@@ -34,6 +34,9 @@ public class Family {
     @Column(nullable = false)
     private int fam_number;
 
+    @ColumnDefault("1")
+    private int head_count;
+
     @Temporal(value = TemporalType.DATE)
     private Date fam_anniversary;
 }
