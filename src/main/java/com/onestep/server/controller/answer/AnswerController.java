@@ -28,12 +28,12 @@ public class AnswerController {
 
 
     //답변 작성
-    @PostMapping(value = "/answer/create/{question_id}/{user_id}", consumes = {MediaType.APPLICATION_JSON_VALUE, "multipart/form-data"})
-    public String writeAnswer(@PathVariable Long question_id,@PathVariable String user_id, @RequestPart(value = "answerTxt") String answerTxt, @RequestPart(value = "img") MultipartFile img){
+    @PostMapping(value = "/answer/create/{question_id}/{user_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String writeAnswer(@PathVariable Long question_id,@PathVariable String user_id, @RequestPart(value = "answerTxt", required = false) String answerTxt, @RequestPart(value = "img", required = false) MultipartFile img){
         String answer = null;
         try{
             log.info("imgTest={}",img);
-            if(img.isEmpty()) {
+            if(img==null || img.isEmpty()) {
                 answer = answerService.writeAnswer(question_id,user_id,answerTxt,"");
             }else {
                 String url = s3Uploader.upload(img, "answer");
