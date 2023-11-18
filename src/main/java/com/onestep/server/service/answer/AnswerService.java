@@ -8,6 +8,7 @@ import com.onestep.server.entity.answer.AnswerWithValidDTO;
 import com.onestep.server.entity.like.LikeAnswerClass;
 import com.onestep.server.entity.like.LikeAnswerDTO;
 import com.onestep.server.repository.*;
+import com.onestep.server.service.image.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class AnswerService {
     private final IGroupQuestionRepository iGroupQuestionRepository;
     private final IFamilyRepository iFamilyRepository;
     private final ILikeAnswerRepository iLikeAnswerRepository;
-
+    private final S3Uploader s3Uploader;
     // 답변 작성
     public String writeAnswer(Long questionId, String userId,String answerTxt, String answerImg){
         Optional<User> optionalUser= iUserRepository.findById(userId);
@@ -125,15 +126,26 @@ public class AnswerService {
     public Answer update(Long answerId,String updateTxt,String answerImg){
         Optional<Answer> optionalAnswer = iAnswerRepository.findById(answerId);
         Answer updateAnswer = new Answer();
-
         Date date = new Date();
         updateAnswer.setAnswer_id(answerId);
         updateAnswer.setQuestion(optionalAnswer.get().getQuestion());
         updateAnswer.setUser(optionalAnswer.get().getUser());
         updateAnswer.setAnswer_txt(updateTxt);
         updateAnswer.setWrite_date(date);
-        if(answerImg != "") {
-            updateAnswer.setAnswer_img(answerImg);
+        if(optionalAnswer.get().getAnswer_img() == null || optionalAnswer.get().getAnswer_img().isEmpty()){
+            if(answerImg != ""){
+                // 원래 이미지 없었는데 이미지 있게 추가
+                updateAnswer.setAnswer_img(answerImg);
+            }
+        }else{
+            deleteAnswerImg(answerId);
+            if(answerImg == ""){
+                // 원래 이미지 있었는데 이미지 없게 추가
+                updateAnswer.setAnswer_img(null);
+            }else{
+                // 원래 이미지 있었는데 이미지 있게 추가
+                updateAnswer.setAnswer_img(answerImg);
+            }
         }
         //답변 저장
         return iAnswerRepository.save(updateAnswer);
@@ -162,5 +174,13 @@ public class AnswerService {
             return answerId+"번 답변에 대한 "+userId+"의 좋아요 삭제 완료";
         }
 
+    }
+
+    public void deleteAnswerImg(Long answer_id){
+        //S3 업로드 된 파일 삭제
+        Optional<Answer> findUrl = iAnswerRepository.findById(answer_id);
+        String url = findUrl.get().getAnswer_img();
+        url = url.replaceAll("https://conteswt-bucket.s3.ap-northeast-2.amazonaws.com/","");
+        s3Uploader.delete(url);
     }
 }
