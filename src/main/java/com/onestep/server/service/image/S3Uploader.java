@@ -1,22 +1,26 @@
 package com.onestep.server.service.image;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import javax.persistence.PersistenceContext;
+
+
+import com.onestep.server.ImageInfra.S3Config;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Optional;
+
 
 @Slf4j
 @RequiredArgsConstructor    // final 멤버변수가 있으면 생성자 항목에 포함시킴
@@ -67,13 +71,17 @@ public class S3Uploader {
     // 로컬에 파일 업로드 하기
     private File convert(MultipartFile file) throws  IOException {
         File convertFile = new File(file.getOriginalFilename());
-        log.info("test={}","test1");
         convertFile.createNewFile();
         FileOutputStream fos = new FileOutputStream(convertFile);
         fos.write(file.getBytes());
         fos.close();
         return convertFile;
 
+    }
+    // 파일 삭제
+    public void delete(String fileKey) {
+        log.info("test3={}", fileKey);
+        amazonS3Client.deleteObject(bucket, fileKey);
     }
 
 }
