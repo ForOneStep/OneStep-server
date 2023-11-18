@@ -65,7 +65,7 @@ public class CommentService {
             ViewCommentDto viewCommentDto = new ViewCommentDto();
 
             viewCommentDto.setComment_txt(comment.getComment_txt());
-
+            viewCommentDto.setComment_id(comment.getComment_id());
             if(comment.getComment()!=null){
                 viewCommentDto.setRoot_comment_id(comment.getComment().getComment_id());
             }

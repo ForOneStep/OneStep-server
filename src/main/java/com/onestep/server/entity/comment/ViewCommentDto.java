@@ -8,6 +8,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class ViewCommentDto {
+    private Long comment_id;
     private String writer_nickname;
     private String writer_profile;
     private Long root_comment_id;

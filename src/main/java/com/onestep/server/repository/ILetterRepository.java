@@ -4,8 +4,10 @@ import com.onestep.server.entity.Family;
 import com.onestep.server.entity.Letter;
 import com.onestep.server.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,6 +26,8 @@ public interface ILetterRepository extends JpaRepository<Letter, Long> {
     List<Letter> findWeeklyLetterByFamilyId(@Param("family") Family family);
 
     //쪽지 상태 변경
+    @Transactional
+    @Modifying
     @Query("UPDATE Letter l SET l.letter_state = l.letter_state+1  WHERE l.letter_state<2")
     void changeLetterState();
 }
