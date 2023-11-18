@@ -32,7 +32,7 @@ public class UserService {
             userInfoDTO.setUser_role(u.getUser_role());
             userInfoDTO.setUser_birth(u.getUser_birth());
             userInfoDTO.setUser_phone_number(u.getUser_phone_number());
-
+            userInfoDTO.setProfile_path(u.getProfile_path());
             userInfos.add(userInfoDTO);
         }
 
