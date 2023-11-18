@@ -20,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.UUID;
 
 
 @Slf4j
@@ -35,6 +37,7 @@ public class S3Uploader {
 
     // MultipartFile을 전달받아 File로 전환한 후 S3에 업로드
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
+
         log.info("multipartFile={}",multipartFile);
         File uploadFile = convert(multipartFile); // 파일 변환할 수 없으면 에러
         return upload(uploadFile, dirName);
@@ -42,6 +45,7 @@ public class S3Uploader {
 
     // s3로 업로드
     private String upload(File uploadFile, String dirName) {
+
         String fileName = dirName + "/" + uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, fileName);
 
@@ -69,8 +73,9 @@ public class S3Uploader {
     }
 
     // 로컬에 파일 업로드 하기
-    private File convert(MultipartFile file) throws  IOException {
-        File convertFile = new File(file.getOriginalFilename());
+    private File convert(MultipartFile file) throws IOException {
+        String storeFilename = UUID.randomUUID() + "." + extractExt(file.getOriginalFilename());
+        File convertFile = new File(storeFilename);
         convertFile.createNewFile();
         FileOutputStream fos = new FileOutputStream(convertFile);
         fos.write(file.getBytes());
@@ -84,4 +89,9 @@ public class S3Uploader {
         amazonS3Client.deleteObject(bucket, fileKey);
     }
 
+    // 파일 확장자 추출
+    private String extractExt(String originalFilename) {
+        int pos = originalFilename.lastIndexOf(".");
+        return originalFilename.substring(pos + 1);
+    }
 }
