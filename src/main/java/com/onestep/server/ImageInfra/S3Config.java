@@ -1,4 +1,4 @@
-package com.onestep.server.entity.ImageInfra;
+package com.onestep.server.ImageInfra;
 
 
 import com.amazonaws.auth.AWSCredentials;
