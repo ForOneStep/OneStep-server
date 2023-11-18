@@ -58,7 +58,7 @@ public class AnswerController {
         Answer answer = null;
         try{
             log.info("imgTest={}",img);
-            if(img.isEmpty()) {
+            if(img==null ||img.isEmpty()) {
                 answer = answerService.update(answer_id, updateTxt,"");
             }else {
                 String url = s3Uploader.upload(img,"answer");
