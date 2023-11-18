@@ -57,7 +57,6 @@ public class AnswerController {
     public String update(@PathVariable Long answer_id, @RequestPart String updateTxt, @RequestPart(value = "img", required = false) MultipartFile img) throws IOException {
         Answer answer = null;
         try{
-            log.info("imgTest={}",img);
             if(img==null ||img.isEmpty()) {
                 answer = answerService.update(answer_id, updateTxt,"");
             }else {
