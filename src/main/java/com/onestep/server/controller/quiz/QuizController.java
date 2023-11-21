@@ -50,4 +50,8 @@ public class QuizController {
     //퀴즈 목록 확인
     @GetMapping(value = "/quiz/quizList/{family_id}")
     public List<QuizListDTO> quizList(@PathVariable String family_id){return quizService.quizList(family_id);}
+
+    //오늘의 퀴즈 확인
+    @GetMapping(value = "/quiz/todayQuiz/{family_id}")
+    public QuizListDTO todayQuiz(@PathVariable String family_id){return quizService.todayQuiz(family_id);}
 }

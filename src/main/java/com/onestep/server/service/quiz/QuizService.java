@@ -72,14 +72,17 @@ public class QuizService {
         Boolean canQuiz = true;
         Date writeDate = new Date();
         LocalTime now = LocalTime.now();
-
+        log.info("Tset1 ={}",writeDate);
         if(now.getHour()<6){
             Date dDate = new Date();
             writeDate = new Date(dDate.getTime()+(1000*60*60*24*-1));
+            log.info("Tset2 ={}",writeDate);
         }
         Optional<Quiz> optionalQuiz = iQuizRepository.findQuizByWriteDate(family_id,writeDate);
+        log.info("Tset3 ={}",optionalQuiz);
         // 같은 날에 퀴즈를 생성 했을 시
         if(optionalQuiz.isPresent()){
+            log.info("Tset4 ={}",optionalQuiz.get());
             canQuiz = false;
         }
 
@@ -160,5 +163,49 @@ public class QuizService {
             quizLists.add(quizListDTO);
         }
         return quizLists;
+    }
+
+    //오늘의 퀴즈 확인
+    public QuizListDTO todayQuiz(String family_id){
+        Date writeDate = new Date();
+        LocalTime now = LocalTime.now();
+
+        if(now.getHour()<6){
+            Date dDate = new Date();
+            writeDate = new Date(dDate.getTime()+(1000*60*60*24*-1));
+        }
+        Optional<Quiz> optionalQuiz = iQuizRepository.findQuizByWriteDate(family_id,writeDate);
+
+        // 같은 날에 퀴즈를 생성 했을 시
+        if(optionalQuiz.isPresent()){
+            Quiz q = optionalQuiz.get();
+            QuizListDTO quizListDTO = new QuizListDTO();
+            quizListDTO.setQuiz_id(q.getQuiz_id());
+            quizListDTO.setWriter_id(q.getUser().getUser_id());
+            quizListDTO.setQuiz_txt(q.getQuiz_txt());
+            quizListDTO.setAnswer1(q.getAnswer1());
+            quizListDTO.setAnswer2(q.getAnswer2());
+            quizListDTO.setAnswer3(q.getAnswer3());
+            quizListDTO.setAnswer4(q.getAnswer4());
+            quizListDTO.setQuiz_ans(q.getQuiz_ans());
+            quizListDTO.setWrite_date(q.getWrite_date());
+
+            List<QuizAnswer> quizAnswers = q.getQuizAnswers();
+            List<QuizAnswerCheckDTO> quizAnswerCheck = new ArrayList<>();
+            for (QuizAnswer qa : quizAnswers) {
+                QuizAnswerCheckDTO quizAnswerCheckDTO = new QuizAnswerCheckDTO();
+                User answer = qa.getUser();
+                quizAnswerCheckDTO.setQuizAnswer_id(qa.getQuizAnswer_id());
+                quizAnswerCheckDTO.setUser_id(answer.getUser_id());
+                quizAnswerCheckDTO.setQuiz_ans(qa.getQuiz_ans());
+                quizAnswerCheckDTO.setQuiz_state(qa.getQuiz_state());
+
+                quizAnswerCheck.add(quizAnswerCheckDTO);
+            }
+            quizListDTO.setQuizAnswers(quizAnswerCheck);
+            return quizListDTO;
+        }else{
+            return null;
+        }
     }
 }
