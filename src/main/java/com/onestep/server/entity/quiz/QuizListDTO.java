@@ -16,6 +16,7 @@ import java.util.List;
 public class QuizListDTO {
     private Long quiz_id;
     private String writer_id;
+    private String writer_nickname;
     private String quiz_txt;
     private String answer1;
     private String answer2;

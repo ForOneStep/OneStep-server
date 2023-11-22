@@ -121,6 +121,7 @@ public class QuizService {
             User answer = q.getUser();
             quizAnswerCheckDTO.setQuizAnswer_id(q.getQuizAnswer_id());
             quizAnswerCheckDTO.setUser_id(answer.getUser_id());
+            quizAnswerCheckDTO.setUser_nickname(answer.getUser_nickname());
             quizAnswerCheckDTO.setQuiz_ans(q.getQuiz_ans());
             quizAnswerCheckDTO.setQuiz_state(q.getQuiz_state());
 
@@ -136,9 +137,11 @@ public class QuizService {
         List<QuizListDTO> quizLists = new ArrayList<>();
 
         for(Quiz q : quizList){
+            User user = q.getUser();
             QuizListDTO quizListDTO = new QuizListDTO();
             quizListDTO.setQuiz_id(q.getQuiz_id());
-            quizListDTO.setWriter_id(q.getUser().getUser_id());
+            quizListDTO.setWriter_id(user.getUser_id());
+            quizListDTO.setWriter_nickname(user.getUser_nickname());
             quizListDTO.setQuiz_txt(q.getQuiz_txt());
             quizListDTO.setAnswer1(q.getAnswer1());
             quizListDTO.setAnswer2(q.getAnswer2());
@@ -152,6 +155,7 @@ public class QuizService {
             for (QuizAnswer qa : quizAnswers) {
                 QuizAnswerCheckDTO quizAnswerCheckDTO = new QuizAnswerCheckDTO();
                 User answer = qa.getUser();
+                quizAnswerCheckDTO.setUser_nickname(answer.getUser_nickname());
                 quizAnswerCheckDTO.setQuizAnswer_id(qa.getQuizAnswer_id());
                 quizAnswerCheckDTO.setUser_id(answer.getUser_id());
                 quizAnswerCheckDTO.setQuiz_ans(qa.getQuiz_ans());
@@ -182,6 +186,7 @@ public class QuizService {
             QuizListDTO quizListDTO = new QuizListDTO();
             quizListDTO.setQuiz_id(q.getQuiz_id());
             quizListDTO.setWriter_id(q.getUser().getUser_id());
+            quizListDTO.setWriter_nickname(q.getUser().getUser_nickname());
             quizListDTO.setQuiz_txt(q.getQuiz_txt());
             quizListDTO.setAnswer1(q.getAnswer1());
             quizListDTO.setAnswer2(q.getAnswer2());
@@ -195,6 +200,7 @@ public class QuizService {
             for (QuizAnswer qa : quizAnswers) {
                 QuizAnswerCheckDTO quizAnswerCheckDTO = new QuizAnswerCheckDTO();
                 User answer = qa.getUser();
+                quizAnswerCheckDTO.setUser_nickname(answer.getUser_nickname());
                 quizAnswerCheckDTO.setQuizAnswer_id(qa.getQuizAnswer_id());
                 quizAnswerCheckDTO.setUser_id(answer.getUser_id());
                 quizAnswerCheckDTO.setQuiz_ans(qa.getQuiz_ans());
