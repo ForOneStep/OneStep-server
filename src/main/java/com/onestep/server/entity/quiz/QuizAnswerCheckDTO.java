@@ -12,6 +12,7 @@ public class QuizAnswerCheckDTO {
 
     private Long quizAnswer_id;
     private String user_id;
+    private String user_nickname;
     private Integer quiz_ans;
     private Integer quiz_state;
 }
