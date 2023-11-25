@@ -48,7 +48,7 @@ public class GptService {
     public String getKeyword(){
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
-        Long randomNum = (long) (random.nextInt(30) + 1);
+        Long randomNum = (long) (random.nextInt(70) + 1);
         Optional<KeyWord> optionalKeyWord = iKeyWordRepository.findById(randomNum);
         return optionalKeyWord.get().getKeyword();
     }
@@ -153,7 +153,7 @@ public class GptService {
         String query4 = "나를 잘 표현할 수 있는 질문을 1개 추천해줘.";
         query4 += "\n질문의 조건은 다음과 같아.";
         query4 += "\n1.내가 어떤 사람인지 표현할 수 있을 만한 질문이어야해";
-        query4 += "\n2.조금은 유쾌한 질문이면 좋겠어.";
+        query4 += "\n2.장난스럽고 유쾌한 질문어어도 괜찮아.";
         query4 += "\n3.다음 키워드와 관련된 질문이어야돼: ";
         query4 += getKeyword();
         query4 += "\n답변 형식은 '오늘의 질문: {오늘의 질문}' 이 형식으로 적어줘";

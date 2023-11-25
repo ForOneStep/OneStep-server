@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -72,17 +71,13 @@ public class QuizService {
         Boolean canQuiz = true;
         Date writeDate = new Date();
         LocalTime now = LocalTime.now();
-        log.info("Tset1 ={}",writeDate);
         if(now.getHour()<6){
             Date dDate = new Date();
             writeDate = new Date(dDate.getTime()+(1000*60*60*24*-1));
-            log.info("Tset2 ={}",writeDate);
         }
         Optional<Quiz> optionalQuiz = iQuizRepository.findQuizByWriteDate(family_id,writeDate);
-        log.info("Tset3 ={}",optionalQuiz);
         // 같은 날에 퀴즈를 생성 했을 시
         if(optionalQuiz.isPresent()){
-            log.info("Tset4 ={}",optionalQuiz.get());
             canQuiz = false;
         }
 
