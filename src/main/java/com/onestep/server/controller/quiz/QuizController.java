@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -54,4 +56,17 @@ public class QuizController {
     //오늘의 퀴즈 확인
     @GetMapping(value = "/quiz/todayQuiz/{family_id}")
     public QuizListDTO todayQuiz(@PathVariable String family_id){return quizService.todayQuiz(family_id);}
+
+    @GetMapping(value="check")
+    public String check(){
+        Date date1 = new Date();
+        Date date = new Date();
+        LocalTime now = LocalTime.now();
+
+        if(now.getHour()<6){
+            Date dDate = new Date();
+            date = new Date(dDate.getTime()+(1000*60*60*24*-1));
+        }
+        return date1.toString() + " "+ date;
+    }
 }
