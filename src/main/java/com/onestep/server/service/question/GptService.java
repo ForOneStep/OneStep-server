@@ -48,11 +48,11 @@ public class GptService {
     public String getKeyword(){
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
-        Long randomNum = (long) (random.nextInt(70) + 1);
+        Long randomNum = (long) (random.nextInt(99) + 1);
         Optional<KeyWord> optionalKeyWord = iKeyWordRepository.findById(randomNum);
         return optionalKeyWord.get().getKeyword();
     }
-    @Scheduled(cron = "0 0 6 ? * TUE,THU,FRI,SUN", zone = "Asia/Seoul") //화 목 금 일
+    @Scheduled(cron = "0 0 0 ? * TUE,THU,FRI,SUN", zone = "Asia/Seoul") //화 목 금 일
     public void getGroupQuestions() {
         Date date = new Date();
 
@@ -144,7 +144,7 @@ public class GptService {
         iGroupQuestionRepository.saveAll(newQuestionList);
     }
 
-    @Scheduled(cron = "0 0 6 ? * MON,WED,SAT", zone = "Asia/Seoul") //월, 수,  토
+    @Scheduled(cron = "0 0 0 ? * MON,WED,SAT", zone = "Asia/Seoul") //월, 수,  토
     public void getQuestions() {
         Date date = new Date();
 
