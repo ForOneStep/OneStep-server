@@ -4,10 +4,7 @@ import com.onestep.server.entity.comment.ViewCommentDto;
 import com.onestep.server.entity.comment.WriteCommentDto;
 import com.onestep.server.service.comment.CommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,7 +19,7 @@ public class CommentController {
         return commentService.writeComment(writeCommentDto);
     }
 
-    @PostMapping("/comment/viewComment/{answerId}")
+    @GetMapping("/comment/viewComment/{answerId}")
     public List<ViewCommentDto> viewComment(@PathVariable Long answerId){
         return commentService.viewComment(answerId);
     }
